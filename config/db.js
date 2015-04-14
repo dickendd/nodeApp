@@ -1,3 +1,3 @@
 module.exports = {
-	url: 'mongodb://localhost:27017/data/db'
+	url: 'mongodb://dickendd:wordup6@ds061631.mongolab.com:61631/heroku_app35874875'
 }
