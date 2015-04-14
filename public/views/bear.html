@@ -1,0 +1,60 @@
+<div class="jumbotron row" ng-controller="BearCtrl">
+    <div class="col-lg-12 text-center">
+        <h1>Food Trucks</h1>
+    </div>
+    <div class="col-lg-12 mb20">
+        <form data-ng-submit="geoCodeMyAddress(address)" class="form-inline">
+            <h2>Use an address:</h2>
+            <div class="input-group col-lg-12">
+                <span class="input-group-addon">
+                    <input type="checkbox" ng-model="checkbox[$address]" ng-change="checkboxClicked($address)">
+                </span>
+                <input type="text" name="address" class="form-control" ng-model="address" placeholder="Street Address">
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-default">Get coordinates</button>
+                </span>
+            </div>
+        </form>
+    </div>
+     <div class="col-lg-12 mb20">
+        <form data-ng-submit="" class="form-inline">
+            <h2>Use my current location (GPS):</h2>
+            <div class="input-group col-lg-12">
+                <input type="checkbox" ng-model="checkbox[$gps]" ng-change="checkboxClicked($gps)">
+            </div>
+        </form>
+    </div>
+    <div class="col-lg-12 mb20">
+        <form data-ng-submit="createBear(navigator.geolocation)">
+            <div class="input-group">
+                <input type="text" name="name" class="form-control" ng-model="bear.name" placeholder="Name">
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-default">Add</button>
+                </span>
+            </div>
+        </form>
+    </div>
+    <div class="col-lg-12 mb20">
+        <h2>Add or update your location:</h2>
+        <ul class="list-unstyled">
+    	    <li ng-repeat="bear in bears" class="row mb20">
+                <div class="col-lg-8 p5">
+                    <span>{{ bear.name }}</span>
+                    <span style="margin-left: 20px;">Lat: {{ bear.geo.coords.latitude }}, Long: {{ bear.geo.coords.longitude }}</span>
+                    <span ng-click="deleteBear(bear._id)" style="cursor: pointer; margin-left: 20px;"> X</span>
+                </div>
+                <form data-ng-submit="editBear(bear._id, bear.name, position)" class="col-lg-4">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn btn-default" ng-click="updateLocation()"><span class="glyphicon glyphicon-record"></span> Update</button>
+                        </span>
+                        <input type="text" name="name" ng-model="bear.name" placeholder="Enter new name" class="form-control" />
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn btn-default btn-primary">Save</button>
+                        </span>
+                    </div>
+                </form>
+    	    </li>
+    	</ul>
+    </div>
+</div>

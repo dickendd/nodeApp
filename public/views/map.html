@@ -1,0 +1,6 @@
+<div class="jumbotron text-center" ng-controller="MapCtrl" ng-if="render">
+    <!-- <h1>Food Trucks</h1> -->
+    <ui-gmap-google-map center="map.center" zoom="map.zoom">
+        <ui-gmap-marker ng-repeat="bear in bears" idKey="bear._id" coords="bear.geo.coords" options="{title: bear.name}"></ui-gmap-marker>
+    </ui-gmap-google-map>
+</div>
