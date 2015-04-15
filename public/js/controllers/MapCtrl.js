@@ -58,7 +58,7 @@ angular.module('bearApp').controller('MapCtrl',
 		    		latitude: 364,
 		    		longitude: -76
 		    	}, 
-		    	zoom: 17
+		    	zoom: 14
 		    };
 			centerMap();
 	    }

@@ -8,13 +8,13 @@
                 <h2>Use my current location (GPS):</h2>
             </form>
         </div>
-        <form data-ng-submit="createBear(navigator.geolocation)">
+        <form data-ng-submit="formSubmit(navigator.geolocation)">
             <div class="col-lg-12 mb20">
                 <input type="text" name="name" class="form-control" ng-model="bear.name" placeholder="Name">
             </div>
             <div class="col-lg-12 mb20">
                 <h2>Use an address, or leave blank to use your current location:</h2>
-                <input type="text" name="address" class="form-control" ng-model="address" placeholder="Street Address">
+                <input type="text" name="address" class="form-control" ng-model="address" placeholder="e.g. 150 Granby Street, Norfolk, VA OR Plume Street at Bank Street, Norfolk, VA">
             </div>
             <span class="col-lg-12">
                 <button type="submit" class="btn btn-primary">Add</button>

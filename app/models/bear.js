@@ -4,6 +4,7 @@ var Schema = mongoose.Schema;
 
 var BearSchema = new Schema({
 	name: String,
+	address: String,
 	geo: {
 		type: {type : String},
         coords: { 

@@ -17,7 +17,6 @@ angular.module('bearApp').controller('BearCtrl',
 		$scope.longitude;
 		$scope.position;
 		$scope.checkboxes = [];
-		var position;
 
 		getBears();
 
@@ -39,74 +38,68 @@ angular.module('bearApp').controller('BearCtrl',
 						longitude: latLong.long
 					}
 				}
-				// console.log($scope.position);
 			});
 		}
 
 		$scope.updateLocation();
 
-		function createBear(){
-			// console.log($scope.address);
-			console.log($scope.position);
-			if($scope.address != null){
-				$scope.position = null;
-				// console.log($scope.address);
-				$scope.geocoderService.codeAddress($scope.address).then(function(response){
+		function formSubmit(){
 
-					$scope.position = {
-						coords: {
-							latitude: response[0].geometry.location.k,
-							longitude: response[0].geometry.location.D
-						}
-					}
+			var geo = {
+				type: 'Point',
+				coords: {
+					latitude: '', 
+					longitude: ''
+				}
+			};
+			var errors = [];
 
-					var lat = $scope.position.coords.latitude;
-					var lng = $scope.position.coords.longitude;
-					$scope.bearService.create({ 
-						name: $scope.bear.name,
-						geo: {
-							type: 'Point',
-							coords: {
-								latitude: lat, 
-								longitude: lng
-							}
-						} 
-					})
-					.success(function(bears){
-						$scope.status = 'Successfully added ' + $scope.bear.name;
-						$scope.bear.name = null;
-						getBears();
-					})
-					.error(function(err){
-						$scope.status = 'Something went wrong: ' + err.message;
+			if($scope.address !== null && $scope.address !== ''){
+
+				$scope.geocoderService.codeAddress($scope.address).then(
+					function(response){
+
+						geo.coords.latitude = response[0].geometry.location.k;
+						geo.coords.longitude = response[0].geometry.location.D;
+
+						createBear($scope.bear.name, $scope.address, geo);
+					}, 
+					function(error){
+						errors.push(error);
 					});
 
-				});
 			} else if($scope.position != null){
-				var lat = $scope.position.coords.latitude;
-				var lng = $scope.position.coords.longitude;
-				$scope.bearService.create({ 
-					name: $scope.bear.name,
-					geo: {
-						type: 'Point',
-						coords: {
-							latitude: lat, 
-							longitude: lng
-						}
-					} 
-				})
-				.success(function(bears){
-					$scope.status = 'Successfully added ' + $scope.bear.name;
-					$scope.bear.name = null;
-					getBears();
-				})
-				.error(function(err){
-					$scope.status = 'Something went wrong: ' + err.message;
-				});
+
+				geo.coords = $scope.position.coords;
+
+				createBear($scope.bear.name, geo);
+
 			} else {
 				alert('No location found, please allow us to see your location, or input an address.');
+				console.log(errors);
 				return;
 			}
+		}
+		$scope.formSubmit = formSubmit;
+
+		function createBear(name, address, geo){
+
+			address = address || '';
+
+			$scope.bearService.create({ 
+				name: name,
+				address: address,
+				geo: geo
+			})
+			.success(function(bears){
+				$scope.status = 'Successfully added ' + $scope.bear.name;
+				$scope.bear.name = null;
+				$scope.bear.address = null;
+				getBears();
+			})
+			.error(function(err){
+				$scope.status = 'Something went wrong: ' + err.message;
+			});
 		};
 
 		$scope.createBear = createBear;
@@ -142,7 +135,7 @@ angular.module('bearApp').controller('BearCtrl',
 		$scope.reverseGeoCode = function(lat, lng){
 
 			$scope.geocoderService.codeLatLng(lat, lng).then(function(response){
-// console.log(response);
+
 				$scope.geocodedAddress = response[0].formatted_address;
 
 			});
