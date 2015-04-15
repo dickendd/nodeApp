@@ -32,24 +32,20 @@
     <script src='//maps.googleapis.com/maps/api/js?sensor=false'></script>
 </head>
 <body ng-app="bearApp">
-    <div class="container">
+    <!-- HEADER -->
+    <nav class="navbar navbar-inverse mb0 bdrRad0">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">Map Page</a>
+        </div>
 
-        <!-- HEADER -->
-        <nav class="navbar navbar-inverse">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="/">Map Page</a>
-            </div>
+        <!-- LINK TO OUR PAGES. ANGULAR HANDLES THE ROUTING HERE -->
+        <ul class="nav navbar-nav">
+            <li><a href="/bears">Add/Edit Trucks</a></li>
+        </ul>
+    </nav>
 
-            <!-- LINK TO OUR PAGES. ANGULAR HANDLES THE ROUTING HERE -->
-            <ul class="nav navbar-nav">
-                <li><a href="/bears">Add/Edit Trucks</a></li>
-            </ul>
-        </nav>
-
-        <!-- ANGULAR DYNAMIC CONTENT -->
-        <div ng-view></div>
-
-    </div>
+    <!-- ANGULAR DYNAMIC CONTENT -->
+    <div ng-view class="wFull hFull"></div>
 </body>
 </html>
 
