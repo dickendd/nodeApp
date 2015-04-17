@@ -1,6 +1,6 @@
 <div class="hFull wFull" ng-controller="MapCtrl" ng-if="render">
     <!-- <h1>Food Trucks</h1> -->
-    {{MapOptions | json}}
+    <!-- {{MapOptions | json}} -->
     <ui-gmap-google-map center="map.center" zoom="map.zoom" class="hFull wFull">
     	<ui-gmap-window coords="MapOptions.markers.selected.coords" show="windowOptions.visible"
 	        closeClick='closeClick()'
