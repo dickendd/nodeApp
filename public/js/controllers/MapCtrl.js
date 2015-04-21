@@ -2,8 +2,29 @@ angular.module('bearApp').controller('MapCtrl',
 	['$scope', 
 	'BearService', 
 	'LocationService', 
+	'uiGmapGoogleMapApi', 
 	'uiGmapIsReady', 
-	function($scope, BearService, LocationService, IsReady){
+	'$q',
+	function($scope, BearService, LocationService, uiGmapGoogleMapApi, uiGmapIsReady, $q){
+
+		uiGmapGoogleMapApi.then(function (maps) {
+	        $scope.googlemap = {};
+	        $scope.map = {
+	            center: {
+	                latitude: 36.86,
+	                longitude: -76.29
+	            },
+	            zoom: 11,
+	            pan: 1,
+	            options: $scope.mapOptions,
+	            control: {},
+	            events: {
+	                tilesloaded: function (maps, eventName, args) {},
+	                dragend: function (maps, eventName, args) {},
+	                zoom_changed: function (maps, eventName, args) {}
+	            }
+	        };
+	    });
 
 		$scope.bearService = BearService;
 		$scope.locationService = LocationService;
@@ -14,7 +35,12 @@ angular.module('bearApp').controller('MapCtrl',
 		$scope.windowOptions = {
 			visible: false
 		};
-		$scope.title = 'Default InfoWindow';
+		$scope.title = 'Loading...';
+		$scope.mapOptions = {
+	        markers: {
+	            selected: {}
+	        }
+	    };
 
 		$scope.onClick = function(data){
 			$scope.windowOptions.visible = !$scope.windowOptions.visible;
@@ -35,45 +61,55 @@ angular.module('bearApp').controller('MapCtrl',
 		})
 
 		function createMarkers(bears){
+			var deferred = $q.defer();
 			var markers = [];
+
 			for(var i = 0; i < bears.length; i++){
 				var lat = bears[i].geo.coords.latitude;
 				var lng = bears[i].geo.coords.longitude;
 				var name = bears[i].name;
-				var id = bears[i]._id;
+				var id = i;
 				markers.push({
-					idKey: id,
+					id: id,
 					options: {
 		                title: name
 					},
-	                latitude: lat,
-	                longitude: lng,
+					coords: {
+		                latitude: lat,
+		                longitude: lng
+		            },
 	                show: true
 	            });
 
 	            $scope.markers = markers;
+	            deferred.resolve($scope.markers);
 	        }
+
+	        return deferred.promise;
 		}
 
-		$scope.addMarkerClickFunction = function (markersArray) {
+	    $scope.addMarkerClickFunction = function (markersArray) {
 	        angular.forEach(markersArray, function (value, key) {
 	            value.onClick = function () {
-	            	console.log('hello');
-	                $scope.onClick(value.options.title);
-	                $scope.MapOptions.markers.selected = value;
+	                $scope.onClick();
+	                $scope.mapOptions.markers.selected = value;
 	            };
 	        });
 	    };
 
 		function getBears(){
+			var deferred = $q.defer();
+
 			$scope.bearService.get()
 				.success(function(bears){
-					createMarkers(bears);
-			        $scope.addMarkerClickFunction($scope.markers);
+					deferred.resolve(bears);
 				})
 				.error(function(err){
+					deferred.reject(err);
 					$scope.status = 'Unable to load bears: ' + err.message;
 				});
+
+			return deferred.promise;
 		}
 
 		function centerMap() {
@@ -98,28 +134,15 @@ angular.module('bearApp').controller('MapCtrl',
 	        )
 		};
 
-		function initialize() {
-			console.log('initializing...');
-	        $scope.map = {
-		    	center: { 
-		    		latitude: 364,
-		    		longitude: -76
-		    	}, 
-		    	zoom: 14,
-		    	options: $scope.MapOptions
-		    };
-		    IsReady.promise()
-			    .then(function(maps){
-			    	console.log('Ready!');
-			    	centerMap();
-				    getBears();
-			    })
-	    }
-	    google.maps.event.addDomListener(window, 'load', initialize());
-
-	    $scope.MapOptions = {
-	        markers: {
-	            selected: {}
-	        }
-	    };
-}])
+	    uiGmapIsReady.promise() // if no value is put in promise() it defaults to promise(1)
+	    .then(function (instances) {
+	        centerMap();
+	        getBears()
+	        .then(function(bears){
+	        	createMarkers(bears)
+	        	.then(function(markers){
+	        		$scope.addMarkerClickFunction(markers);
+	        	});
+	        });
+	    });
+}]);

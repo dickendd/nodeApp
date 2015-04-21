@@ -1,15 +1,10 @@
-<div class="hFull wFull" ng-controller="MapCtrl" ng-if="render">
-    <!-- <h1>Food Trucks</h1> -->
-    <!-- {{MapOptions | json}} -->
-    <ui-gmap-google-map center="map.center" zoom="map.zoom" class="hFull wFull">
-    	<ui-gmap-window coords="MapOptions.markers.selected.coords" show="windowOptions.visible"
-	        closeClick='closeClick()'
-	        ><div>{{ title }}</div>
+<div class="hFull wFull" ng-if="render">
+    <ui-gmap-google-map center="map.center" zoom="map.zoom" events="map.events" class="hFull wFull">
+    	<ui-gmap-window coords="mapOptions.markers.selected.coords" show="windowOptions.visible" options="windowOptions"
+	        closeClick="closeClick()"
+	        >{{ title }}
 		</ui-gmap-window>
-	    <ui-gmap-markers models="markers" coords="'self'" idKey="'idKey'" options="'options'" events="markers.events" click="onClick">
-	    	
-	    </ui-gmap-markers>
-        <!-- <ui-gmap-marker ng-repeat="bear in bears" idKey="bear._id" coords="bear.geo.coords" options="{title: bear.name}"></ui-gmap-marker> -->
+	    <ui-gmap-markers models="markers" coords="'coords'" idkey="'id'" options="'options'" events="'markers.events'" click="'onClick'"></ui-gmap-markers>
     </ui-gmap-google-map>
 
 </div>
