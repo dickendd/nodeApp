@@ -21,29 +21,38 @@
     <script src="js/services/BearService.js"></script>
     <script src="js/services/LocationService.js"></script>
     <script src="js/services/GeocoderService.js"></script>
+    <script src="js/services/AuthService.js"></script>
+    <script src="js/controllers/AdminUserCtrl.js"></script>
     <script src="js/controllers/MainCtrl.js"></script>
     <script src="js/controllers/MapCtrl.js"></script>
     <script src="js/controllers/BearCtrl.js"></script>
     <script src="js/appRoutes.js"></script>
-    <script src="libs/ngstorage/ngStorage.js"></script>
+    <script src="/libs/ngstorage/ngStorage.js"></script>
     <script src='/libs/lodash/dist/lodash.min.js'></script>
     <script src='/libs/angular-google-maps/dist/angular-google-maps.min.js'></script>
 
     <script src='//maps.googleapis.com/maps/api/js?sensor=false'></script>
 </head>
-<body ng-app="bearApp">
+<body data-ng-app="bearApp">
     <!-- HEADER -->
-    <nav class="navbar navbar-inverse mb0 bdrRad0">
+    <nav class="navbar navbar-inverse mb0 bdrRad0" data-ng-controller="AdminUserCtrl">
         <a class="navbar-brand" href="/">Food Trucks</a>
 
         <!-- LINK TO OUR PAGES. ANGULAR HANDLES THE ROUTING HERE -->
         <ul class="nav navbar-nav">
             <li><a href="/bears">Add/Edit Trucks</a></li>
         </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li data-ng-hide="token"><a ng-href="/login"><span class="fa fa-user"></span>Login</a></li>
+            <li data-ng-hide="token"><a ng-href="/signup"><span class="fa fa-user"></span>Signup</a></li>
+            <li data-ng-show="token"><a ng-href="/me"><span class="fa fa-user"></span>Admin</a></li>
+            <li data-ng-show="token"><a ng-click="logout()"><span class="fa fa-user"></span>Logout</a></li>
+        </ul>
+        <p style="color: #FFF;">{{ token }}</p>
     </nav>
 
     <!-- ANGULAR DYNAMIC CONTENT -->
-    <div ng-view class="wFull hFull"></div>
+    <div data-ng-view class="wFull hFull"></div>
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

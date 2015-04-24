@@ -12,7 +12,7 @@ angular.module('bearApp').controller('BearCtrl',
 		$scope.bears;
 		$scope.status;
 		$scope.geocodedLatLng;
-		$scope.address;
+		$scope.address = null;
 		$scope.latitude;
 		$scope.longitude;
 		$scope.position;
@@ -54,15 +54,14 @@ angular.module('bearApp').controller('BearCtrl',
 			};
 			var errors = [];
 
-			if($scope.address !== null && $scope.address !== ''){
-
+			if($scope.address !== null && $scope.address !== '' && $scope.address !== 'undefined'){
 				$scope.geocoderService.codeAddress($scope.address).then(
 					function(response){
 
 						geo.coords.latitude = response[0].geometry.location.k;
 						geo.coords.longitude = response[0].geometry.location.D;
 
-						createBear($scope.bear.name, $scope.address, geo);
+						createBear($scope.bear.name, $scope.address, geo, $scope.bear.windowCopy, $scope.bear.menuUrl);
 					}, 
 					function(error){
 						errors.push(error);
@@ -72,7 +71,7 @@ angular.module('bearApp').controller('BearCtrl',
 
 				geo.coords = $scope.position.coords;
 
-				createBear($scope.bear.name, geo);
+				createBear($scope.bear.name, null, geo, $scope.bear.windowCopy, $scope.bear.menuUrl);
 
 			} else {
 				alert('No location found, please allow us to see your location, or input an address.');
@@ -82,19 +81,23 @@ angular.module('bearApp').controller('BearCtrl',
 		}
 		$scope.formSubmit = formSubmit;
 
-		function createBear(name, address, geo){
+		function createBear(name, address, geo, windowCopy, menuUrl){
 
 			address = address || '';
 
 			$scope.bearService.create({ 
 				name: name,
 				address: address,
-				geo: geo
+				geo: geo,
+				windowCopy: windowCopy,
+				menuUrl: menuUrl
 			})
 			.success(function(bears){
 				$scope.status = 'Successfully added ' + $scope.bear.name;
 				$scope.bear.name = null;
 				$scope.bear.address = null;
+				$scope.bear.windowCopy = null;
+				$scope.bear.menuUrl = null;
 				getBears();
 			})
 			.error(function(err){
@@ -104,13 +107,15 @@ angular.module('bearApp').controller('BearCtrl',
 
 		$scope.createBear = createBear;
 
-		$scope.editBear = function(bearId, bearName, coords){
+		$scope.editBear = function(bearId, bearName, coords, windowCopy, menuUrl){
 			$scope.bearService.update(bearId, { 
 				name: bearName,
 				geo: {
 					type: 'Point',
 					coords: coords
-				} 
+				},
+				windowCopy: windowCopy,
+				menuUrl: menuUrl
 			})
 				.success(function(bears){
 					$scope.status = 'Successfully edited bear';
@@ -139,10 +144,6 @@ angular.module('bearApp').controller('BearCtrl',
 				$scope.geocodedAddress = response[0].formatted_address;
 
 			});
-		}
-
-		$scope.checkboxClicked = function(index, event){
-			alert("checkbox " + index + " is " + $scope.checkbox[index]);
 		}
 
 	}]);

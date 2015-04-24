@@ -36,14 +36,21 @@ angular.module('bearApp').controller('MapCtrl',
 			visible: false
 		};
 		$scope.title = 'Loading...';
+		$scope.windowCopy = 'Default window copy.';
+		$scope.menuUrl = 'http://google.com';
 		$scope.mapOptions = {
 	        markers: {
 	            selected: {}
 	        }
 	    };
+	    $scope.templateUrl = '../views/templates/window.html';
 
 		$scope.onClick = function(data){
+			$scope.title = data.title;
+			$scope.windowCopy = data.windowCopy;
+			$scope.menuUrl = data.menuUrl;
 			$scope.windowOptions.visible = !$scope.windowOptions.visible;
+			$scope.windowOptions.pixelOffset = new window.google.maps.Size(0, -35);
 		}
 
 		$scope.closeClick = function(){
@@ -68,11 +75,15 @@ angular.module('bearApp').controller('MapCtrl',
 				var lat = bears[i].geo.coords.latitude;
 				var lng = bears[i].geo.coords.longitude;
 				var name = bears[i].name;
+				var windowCopy = bears[i].windowCopy;
+				var menuUrl = bears[i].menuUrl;
 				var id = i;
 				markers.push({
 					id: id,
 					options: {
-		                title: name
+		                title: name,
+		                windowCopy: windowCopy,
+		                menuUrl: menuUrl
 					},
 					coords: {
 		                latitude: lat,
@@ -91,7 +102,7 @@ angular.module('bearApp').controller('MapCtrl',
 	    $scope.addMarkerClickFunction = function (markersArray) {
 	        angular.forEach(markersArray, function (value, key) {
 	            value.onClick = function () {
-	                $scope.onClick();
+	                $scope.onClick(value.options);
 	                $scope.mapOptions.markers.selected = value;
 	            };
 	        });

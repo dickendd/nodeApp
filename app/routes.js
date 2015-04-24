@@ -1,6 +1,80 @@
 var Bear = require('./models/bear');
+var User = require('./models/user');
+var jwt = require('jsonwebtoken');
 
-module.exports = function(app) {
+module.exports = function(app, auth) {
+
+	app.post('/login', function(req, res) {
+		User.findOne({email: req.body.email, password: req.body.password}, function(err, user) {
+	        if (err) {
+	            res.json({
+	                type: false,
+	                data: "Error occured: " + err
+	            });
+	        } else {
+	            if (user) {
+	               res.json({
+	                    type: true,
+	                    data: user,
+	                    token: user.token
+	                }); 
+	            } else {
+	                res.json({
+	                    type: false,
+	                    data: "Incorrect email/password"
+	                });    
+	            }
+	        }
+	    });
+	});
+
+	app.post('/signup', function(req, res) {
+	    User.findOne({email: req.body.email, password: req.body.password}, function(err, user) {
+	        if (err) {
+	            res.json({
+	                type: false,
+	                data: "Error occured: " + err
+	            });
+	        } else {
+	            if (user) {
+	                res.json({
+	                    type: false,
+	                    data: "User already exists!"
+	                });
+	            } else {
+	                var userModel = new User();
+	                userModel.email = req.body.email;
+	                userModel.password = req.body.password;
+	                userModel.save(function(err, user) {
+	                    user.token = jwt.sign(user, auth.secret);
+	                    user.save(function(err, user1) {
+	                        res.json({
+	                            type: true,
+	                            data: user1,
+	                            token: user1.token
+	                        });
+	                    });
+	                })
+	            }
+	        }
+	    });
+	});
+
+	app.get('/me', ensureAuthorized, function(req, res) {
+	    User.findOne({token: req.token}, function(err, user) {
+	        if (err) {
+	            res.json({
+	                type: false,
+	                data: "Error occured: " + err
+	            });
+	        } else {
+	            res.json({
+	                type: true,
+	                data: user
+	            });
+	        }
+	    });
+	});
 
 	// test route to make sure everything is working (GET http://localhost:8080/api)
 	app.get('/api', function(req, res) {
@@ -12,6 +86,8 @@ module.exports = function(app) {
 		var bear = new Bear();
 		bear.name = req.body.name;
 		bear.geo = req.body.geo;
+		bear.windowCopy = req.body.windowCopy;
+		bear.menuUrl = req.body.menuUrl;
 
 		bear.save(function(err){
 			if (err) {
@@ -44,7 +120,7 @@ module.exports = function(app) {
 			if (err) {
 				res.send(err);
 			}
-			bear.name = req.body.name;
+			bear.windowUrl = req.body.windowUrl;
 			bear.save(function(err){
 				if (err) {
 					res.send(err);
@@ -70,4 +146,17 @@ module.exports = function(app) {
 	app.get('*', function(req, res){
 		res.sendfile('./public/views/index.html');
 	});
+};
+
+function ensureAuthorized(req, res, next) {
+    var bearerToken;
+    var bearerHeader = req.headers["authorization"];
+    if (typeof bearerHeader !== 'undefined') {
+        var bearer = bearerHeader.split(" ");
+        bearerToken = bearer[1];
+        req.token = bearerToken;
+        next();
+    } else {
+        res.send(403);
+    }
 }

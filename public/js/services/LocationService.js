@@ -20,7 +20,7 @@ angular.module('bearApp')
             
             return deferred.promise;
 
-        };      
+        };
         
         return {
             
