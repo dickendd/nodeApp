@@ -1,1 +1,1 @@
-var app = angular.module('bearApp', ['ngRoute', 'appRoutes', 'uiGmapgoogle-maps', 'ngStorage']);
+var app = angular.module('truckApp', ['ngRoute', 'appRoutes', 'uiGmapgoogle-maps', 'ngStorage']);

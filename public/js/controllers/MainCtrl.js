@@ -1,6 +1,6 @@
 // public/js/controllers/MainCtrl.js
-angular.module('bearApp').controller('MainCtrl', function($scope) {
+angular.module('truckApp').controller('MainCtrl', function($scope) {
 
-    $scope.tagline = 'Making some bears!';   
+    $scope.tagline = 'Making some trucks!';   
 
 });

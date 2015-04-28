@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var BearSchema = new Schema({
+var TruckSchema = new Schema({
 	name: String,
 	address: String,
 	geo: {
@@ -15,4 +15,4 @@ var BearSchema = new Schema({
 	menuUrl: String
 });
 
-module.exports = mongoose.model('Bear', BearSchema);
+module.exports = mongoose.model('Truck', TruckSchema);

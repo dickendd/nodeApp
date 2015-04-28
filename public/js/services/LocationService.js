@@ -1,4 +1,4 @@
-angular.module('bearApp')
+angular.module('truckApp')
     .factory('LocationService', function($q) {
         
         var latLong = null;

@@ -1,5 +1,5 @@
-angular.module('bearApp')
-    .factory('AuthService', ['$http', '$localStorage', function($http, $localStorage){
+angular.module('truckApp')
+    .factory('AuthService', ['$http', '$window', function($http, $window){
         var baseUrl = "";
         function changeUser(user) {
             angular.extend(currentUser, user);
@@ -23,7 +23,7 @@ angular.module('bearApp')
         }
  
         function getUserFromToken() {
-            var token = $localStorage.token;
+            var token = $window.sessionStorage.token;
             var user = {};
             if (typeof token !== 'undefined') {
                 var encoded = token.split('.')[1];
@@ -46,7 +46,7 @@ angular.module('bearApp')
             },
             logout: function(success) {
                 changeUser({});
-                delete $localStorage.token;
+                delete $window.sessionStorage.token;
                 success();
             }
         };

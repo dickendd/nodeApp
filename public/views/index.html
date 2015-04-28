@@ -18,14 +18,15 @@
 
     <!-- ANGULAR CUSTOM -->
     <script src="js/app.js"></script>
-    <script src="js/services/BearService.js"></script>
+    <script src="js/services/TruckService.js"></script>
     <script src="js/services/LocationService.js"></script>
     <script src="js/services/GeocoderService.js"></script>
     <script src="js/services/AuthService.js"></script>
     <script src="js/controllers/AdminUserCtrl.js"></script>
     <script src="js/controllers/MainCtrl.js"></script>
     <script src="js/controllers/MapCtrl.js"></script>
-    <script src="js/controllers/BearCtrl.js"></script>
+    <script src="js/controllers/TruckCtrl.js"></script>
+    <script src="js/controllers/ProfileCtrl.js"></script>
     <script src="js/appRoutes.js"></script>
     <script src="/libs/ngstorage/ngStorage.js"></script>
     <script src='/libs/lodash/dist/lodash.min.js'></script>
@@ -33,22 +34,21 @@
 
     <script src='//maps.googleapis.com/maps/api/js?sensor=false'></script>
 </head>
-<body data-ng-app="bearApp">
+<body data-ng-app="truckApp">
     <!-- HEADER -->
     <nav class="navbar navbar-inverse mb0 bdrRad0" data-ng-controller="AdminUserCtrl">
         <a class="navbar-brand" href="/">Food Trucks</a>
 
         <!-- LINK TO OUR PAGES. ANGULAR HANDLES THE ROUTING HERE -->
         <ul class="nav navbar-nav">
-            <li><a href="/bears">Add/Edit Trucks</a></li>
+            <li><a href="/trucks">Add/Edit Trucks</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-            <li data-ng-hide="token"><a ng-href="/login"><span class="fa fa-user"></span>Login</a></li>
-            <li data-ng-hide="token"><a ng-href="/signup"><span class="fa fa-user"></span>Signup</a></li>
-            <li data-ng-show="token"><a ng-href="/me"><span class="fa fa-user"></span>Admin</a></li>
-            <li data-ng-show="token"><a ng-click="logout()"><span class="fa fa-user"></span>Logout</a></li>
+            <li ><a ng-href="/login"><span class="fa fa-user"></span>Login</a></li>
+            <li ><a ng-href="/signup"><span class="fa fa-user"></span>Signup</a></li>
+            <li ><a ng-href="/me"><span class="fa fa-user"></span>Admin</a></li>
+            <li class="pr20 csrPointer"><a ng-click="logout()"><span class="fa fa-user"></span>Logout</a></li>
         </ul>
-        <p style="color: #FFF;">{{ token }}</p>
     </nav>
 
     <!-- ANGULAR DYNAMIC CONTENT -->

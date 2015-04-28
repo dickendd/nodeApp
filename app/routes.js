@@ -1,4 +1,4 @@
-var Bear = require('./models/bear');
+var Truck = require('./models/truck');
 var User = require('./models/user');
 var jwt = require('jsonwebtoken');
 
@@ -82,62 +82,62 @@ module.exports = function(app, auth) {
 	});
 
 	// add more routes here
-	app.post('/api/bears', function(req, res){
-		var bear = new Bear();
-		bear.name = req.body.name;
-		bear.geo = req.body.geo;
-		bear.windowCopy = req.body.windowCopy;
-		bear.menuUrl = req.body.menuUrl;
+	app.post('/api/trucks', function(req, res){
+		var truck = new Truck();
+		truck.name = req.body.name;
+		truck.geo = req.body.geo;
+		truck.windowCopy = req.body.windowCopy;
+		truck.menuUrl = req.body.menuUrl;
 
-		bear.save(function(err){
+		truck.save(function(err){
 			if (err) {
 				res.send(err);
 			}
-			res.json({ message: bear });
+			res.json({ message: truck });
 		});
 	});
 
-	app.get('/api/bears', function(req, res){
-		Bear.find(function(err, bears){
+	app.get('/api/trucks', function(req, res){
+		Truck.find(function(err, trucks){
 			if (err) {
 				res.send(err);
 			}
-			res.json(bears);
+			res.json(trucks);
 		});
 	});
 
-	app.get('/api/bears/:bear_id', function(req, res){
-		Bear.findById(req.params.bear_id, function(err, bear){
+	app.get('/api/trucks/:truck_id', function(req, res){
+		Truck.findById(req.params.truck_id, function(err, truck){
 			if (err) {
 				res.send(err);
 			}
-			res.json(bear);
+			res.json(truck);
 		});
 	});
 
-	app.put('/api/bears/:bear_id', function(req, res){
-		Bear.findById(req.params.bear_id, function(err, bear){
+	app.put('/api/trucks/:truck_id', function(req, res){
+		Truck.findById(req.params.truck_id, function(err, truck){
 			if (err) {
 				res.send(err);
 			}
-			bear.windowUrl = req.body.windowUrl;
-			bear.save(function(err){
+			truck.windowUrl = req.body.windowUrl;
+			truck.save(function(err){
 				if (err) {
 					res.send(err);
 				}
-				res.json({ message: 'Bear updated!' });
+				res.json({ message: 'Truck updated!' });
 			});
 		})
 	});
 
-	app.delete('/api/bears/:bear_id', function(req, res){
-		Bear.remove({
-			_id: req.params.bear_id
-		}, function(err, bear){
+	app.delete('/api/trucks/:truck_id', function(req, res){
+		Truck.remove({
+			_id: req.params.truck_id
+		}, function(err, truck){
 			if (err) {
 				res.send(err);
 			}
-			res.json({ message: 'Bear successfully deleted!' });
+			res.json({ message: 'Truck successfully deleted!' });
 		})
 	});
 
@@ -151,6 +151,7 @@ module.exports = function(app, auth) {
 function ensureAuthorized(req, res, next) {
     var bearerToken;
     var bearerHeader = req.headers["authorization"];
+
     if (typeof bearerHeader !== 'undefined') {
         var bearer = bearerHeader.split(" ");
         bearerToken = bearer[1];

@@ -1,11 +1,11 @@
-angular.module('bearApp')
+angular.module('truckApp')
     .controller('AdminUserCtrl', 
     	['$rootScope',
         '$scope',
     	'$location', 
-        '$localStorage', 
+        '$window', 
     	'AuthService',
-    	function($rootScope, $scope, $location, $localStorage, AuthService) {
+    	function($rootScope, $scope, $location, $window, AuthService) {
     		$scope.login = function() {
                 var formData = {
                     email: $scope.email,
@@ -16,8 +16,8 @@ angular.module('bearApp')
                     if (res.type == false) {
                         alert(res.data);
                     } else {
-                        $localStorage.token = res.data.token;
-                        window.location = '/me';
+                        $window.sessionStorage.token = res.data.token;
+                        window.location = '/';
                     }
                 }, function() {
                     $rootScope.error = 'Failed to log in';
@@ -34,7 +34,7 @@ angular.module('bearApp')
                     if (res.type == false) {
                         alert(res.data)
                     } else {
-                        $localStorage.token = res.data.token;
+                        $window.sessionStorage.token = res.data.token;
                         window.location = "/"   
                     }
                 }, function() {
@@ -57,6 +57,6 @@ angular.module('bearApp')
                     alert("Failed to log out!");
                 });
             };
-            $scope.token = $localStorage.token;
+            $scope.token = $window.sessionStorage.token;
     	}
     ]);

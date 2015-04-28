@@ -14,7 +14,7 @@ var bodyParser     = require('body-parser');
 var methodOverride = require('method-override');
 var bodyParser = require('body-parser');
 var mongoose   = require('mongoose');
-var Bear = require('./app/models/bear');
+var Truck = require('./app/models/truck');
 var User = require('./app/models/user');
 
 var morgan       = require('morgan');
@@ -53,9 +53,9 @@ app.use(function(req, res, next) {
 });
 
 
-var expressJwt = require('express-jwt');
+// var expressJwt = require('express-jwt');
 
-app.use('/me', expressJwt({secret: auth.secret}));
+// app.use('/me', expressJwt({secret: auth.secret}));
 
 // ROUTES FOR API
 // ==================================================

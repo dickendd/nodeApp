@@ -1,4 +1,4 @@
-angular.module('bearApp')
+angular.module('truckApp')
   .factory('Geocoder', function ($q) {
 
     var geocoder = new google.maps.Geocoder();

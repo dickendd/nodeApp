@@ -1,11 +1,11 @@
-angular.module('bearApp').controller('MapCtrl', 
+angular.module('truckApp').controller('MapCtrl', 
 	['$scope', 
-	'BearService', 
+	'TruckService', 
 	'LocationService', 
 	'uiGmapGoogleMapApi', 
 	'uiGmapIsReady', 
 	'$q',
-	function($scope, BearService, LocationService, uiGmapGoogleMapApi, uiGmapIsReady, $q){
+	function($scope, TruckService, LocationService, uiGmapGoogleMapApi, uiGmapIsReady, $q){
 
 		uiGmapGoogleMapApi.then(function (maps) {
 	        $scope.googlemap = {};
@@ -14,7 +14,7 @@ angular.module('bearApp').controller('MapCtrl',
 	                latitude: 36.86,
 	                longitude: -76.29
 	            },
-	            zoom: 11,
+	            zoom: 15,
 	            pan: 1,
 	            options: $scope.mapOptions,
 	            control: {},
@@ -26,9 +26,9 @@ angular.module('bearApp').controller('MapCtrl',
 	        };
 	    });
 
-		$scope.bearService = BearService;
+		$scope.truckService = TruckService;
 		$scope.locationService = LocationService;
-		$scope.bears;
+		$scope.trucks;
 		$scope.status;
 		$scope.render = true;
 		$scope.markers = [];
@@ -57,7 +57,7 @@ angular.module('bearApp').controller('MapCtrl',
 			$scope.windowOptions.visible = false;
 		}
 
-		// getBears();
+		// getTrucks();
 		$scope.locationService.getLatLong().then(function(latLong){
 			$scope.position = {
 				coords: {
@@ -67,16 +67,16 @@ angular.module('bearApp').controller('MapCtrl',
 			}
 		})
 
-		function createMarkers(bears){
+		function createMarkers(trucks){
 			var deferred = $q.defer();
 			var markers = [];
 
-			for(var i = 0; i < bears.length; i++){
-				var lat = bears[i].geo.coords.latitude;
-				var lng = bears[i].geo.coords.longitude;
-				var name = bears[i].name;
-				var windowCopy = bears[i].windowCopy;
-				var menuUrl = bears[i].menuUrl;
+			for(var i = 0; i < trucks.length; i++){
+				var lat = trucks[i].geo.coords.latitude;
+				var lng = trucks[i].geo.coords.longitude;
+				var name = trucks[i].name;
+				var windowCopy = trucks[i].windowCopy;
+				var menuUrl = trucks[i].menuUrl;
 				var id = i;
 				markers.push({
 					id: id,
@@ -108,16 +108,16 @@ angular.module('bearApp').controller('MapCtrl',
 	        });
 	    };
 
-		function getBears(){
+		function getTrucks(){
 			var deferred = $q.defer();
 
-			$scope.bearService.get()
-				.success(function(bears){
-					deferred.resolve(bears);
+			$scope.truckService.get()
+				.success(function(trucks){
+					deferred.resolve(trucks);
 				})
 				.error(function(err){
 					deferred.reject(err);
-					$scope.status = 'Unable to load bears: ' + err.message;
+					$scope.status = 'Unable to load trucks: ' + err.message;
 				});
 
 			return deferred.promise;
@@ -148,9 +148,9 @@ angular.module('bearApp').controller('MapCtrl',
 	    uiGmapIsReady.promise() // if no value is put in promise() it defaults to promise(1)
 	    .then(function (instances) {
 	        centerMap();
-	        getBears()
-	        .then(function(bears){
-	        	createMarkers(bears)
+	        getTrucks()
+	        .then(function(trucks){
+	        	createMarkers(trucks)
 	        	.then(function(markers){
 	        		$scope.addMarkerClickFunction(markers);
 	        	});

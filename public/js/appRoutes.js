@@ -1,13 +1,12 @@
 // public/js/appRoutes.js
 angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', '$httpProvider', function($routeProvider, $locationProvider, $httpProvider) {
 
-    $httpProvider.interceptors.push(['$q', '$location', '$localStorage', function($q, $location, $localStorage) {
+    $httpProvider.interceptors.push(['$q', '$location', '$window', function($q, $location, $window) {
         return {
             'request': function (config) {
                 config.headers = config.headers || {};
-                if ($localStorage.token) {
-                    console.log($localStorage.token);
-                    config.headers.Authorization = 'Bearer ' + $localStorage.token;
+                if ($window.sessionStorage.token) {
+                    config.headers.Authorization = 'Bearer ' + $window.sessionStorage.token;
                 }
                 return config;
             },
@@ -28,10 +27,10 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', '
             controller: 'MapCtrl'
         })
 
-        // bears page that will use the BearController
-        .when('/bears', {
-            templateUrl: 'views/bear.html',
-            controller: 'BearCtrl'
+        // trucks page that will use the TruckController
+        .when('/trucks', {
+            templateUrl: 'views/truck.html',
+            controller: 'TruckCtrl'
         })
 
         .when('/login', {
@@ -46,7 +45,7 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', '
 
         .when('/me', {
             templateUrl: 'views/profile.html',
-            controller: 'AdminUserCtrl'
+            controller: 'ProfileCtrl'
         })
 
     $locationProvider.html5Mode(true);
