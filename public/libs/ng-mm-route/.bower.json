@@ -1,0 +1,30 @@
+{
+  "name": "ng-mm-route",
+  "version": "1.1.0",
+  "main": "dist/mm-route.js",
+  "ignore": [
+    ".jshintrc",
+    ".editorconfig"
+  ],
+  "dependencies": {
+    "angular": "^1.3.0",
+    "angular-route": "^1.3.0"
+  },
+  "devDependencies": {
+    "angular-mocks": "^1.3.0"
+  },
+  "resolutions": {
+    "angular": "1.3.13"
+  },
+  "homepage": "https://github.com/mammaldev/ng-mm-route",
+  "_release": "1.1.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.1.0",
+    "commit": "bcef3a53878d779682c21b4575ab98a74e8a3872"
+  },
+  "_source": "git://github.com/mammaldev/ng-mm-route.git",
+  "_target": "~1.1.0",
+  "_originalSource": "ng-mm-route",
+  "_direct": true
+}
