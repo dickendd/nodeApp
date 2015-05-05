@@ -1,52 +1,42 @@
 // public/js/appRoutes.js
-angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', '$httpProvider', function($routeProvider, $locationProvider, $httpProvider) {
+angular.module('appRoutes', []).config(['$locationProvider', '$httpProvider', '$stateProvider', '$urlRouterProvider', function($locationProvider, $httpProvider, $stateProvider, $urlRouterProvider) {
 
-    $httpProvider.interceptors.push(['$q', '$location', '$window', function($q, $location, $window) {
-        return {
-            'request': function (config) {
-                config.headers = config.headers || {};
-                if ($window.sessionStorage.token) {
-                    config.headers.Authorization = 'Bearer ' + $window.sessionStorage.token;
-                }
-                return config;
-            },
-            'responseError': function(response) {
-                if(response.status === 401 || response.status === 403) {
-                    $location.path('/login');
-                }
-                return $q.reject(response);
-            }
-        };
-    }]);
+    $httpProvider.interceptors.push('authInterceptor');
 
-    $routeProvider
-
-        // home page
-        .when('/', {
-            templateUrl: 'views/map.html',
-            controller: 'MapCtrl'
+    $stateProvider
+        .state('index', {
+          url: '/',
+          templateUrl: 'views/map.html',
+          controller: 'MapCtrl'
         })
-
-        // trucks page that will use the TruckController
-        .when('/trucks', {
-            templateUrl: 'views/truck.html',
-            controller: 'TruckCtrl'
+        .state('trucks', {
+          url: '/trucks',
+          templateUrl: 'views/truck.html',
+          controller: 'TruckCtrl',
+          data: {
+            authorizedRoles: USER_ROLES.admin
+          }
         })
-
-        .when('/login', {
-            templateUrl: 'views/login.html',
-            controller: 'AdminUserCtrl'
+        .state('login', {
+          url: '/login',
+          templateUrl: 'views/login.html',
+          controller: 'AdminUserCtrl'
         })
-
-        .when('/signup', {
-            templateUrl: 'views/signup.html',
-            controller: 'AdminUserCtrl'
+        .state('signup', {
+          url: '/signup',
+          templateUrl: 'views/signup.html',
+          controller: 'AdminUserCtrl'
         })
+        .state('me', {
+          url: '/me',
+          templateUrl: 'views/profile.html',
+          controller: 'ProfileCtrl',
+          data: {
+            authorizedRoles: USER_ROLES.user
+          }
+        });
 
-        .when('/me', {
-            templateUrl: 'views/profile.html',
-            controller: 'ProfileCtrl'
-        })
+    $urlRouterProvider.otherwise('/');
 
     $locationProvider.html5Mode(true);
 }]);

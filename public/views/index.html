@@ -9,7 +9,7 @@
     <title>Starter Node and Angular</title>
 
     <!-- CSS -->
-    <link rel="stylesheet" href="libs/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="libs/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="css/main.css"> <!-- custom styles -->
 
     <!-- JS -->
@@ -22,37 +22,39 @@
     <script src="js/services/LocationService.js"></script>
     <script src="js/services/GeocoderService.js"></script>
     <script src="js/services/AuthService.js"></script>
+    <script src="js/services/SessionService.js"></script>
+    <script src="js/controllers/ApplicationCtrl.js"></script>
     <script src="js/controllers/AdminUserCtrl.js"></script>
     <script src="js/controllers/MainCtrl.js"></script>
     <script src="js/controllers/MapCtrl.js"></script>
     <script src="js/controllers/TruckCtrl.js"></script>
     <script src="js/controllers/ProfileCtrl.js"></script>
-    <script src="js/appRoutes.js"></script>
+    <script src="js/services/authInterceptor.js"></script>
+    <script src="js/routingConfig.js"></script>
+    <script src="/libs/angular-ui-router/release/angular-ui-router.min.js"></script>
     <script src="/libs/ngstorage/ngStorage.js"></script>
     <script src='/libs/lodash/dist/lodash.min.js'></script>
     <script src='/libs/angular-google-maps/dist/angular-google-maps.min.js'></script>
 
     <script src='//maps.googleapis.com/maps/api/js?sensor=false'></script>
 </head>
-<body data-ng-app="truckApp">
+<body data-ng-app="truckApp" ng-controller="ApplicationCtrl">
     <!-- HEADER -->
-    <nav class="navbar navbar-inverse mb0 bdrRad0" data-ng-controller="AdminUserCtrl">
+    <nav class="navbar navbar-inverse mb0 bdrRad0">
         <a class="navbar-brand" href="/">Food Trucks</a>
 
         <!-- LINK TO OUR PAGES. ANGULAR HANDLES THE ROUTING HERE -->
-        <ul class="nav navbar-nav">
-            <li><a href="/trucks">Add/Edit Trucks</a></li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-            <li ><a ng-href="/login"><span class="fa fa-user"></span>Login</a></li>
-            <li ><a ng-href="/signup"><span class="fa fa-user"></span>Signup</a></li>
-            <li ><a ng-href="/me"><span class="fa fa-user"></span>Admin</a></li>
-            <li class="pr20 csrPointer"><a ng-click="logout()"><span class="fa fa-user"></span>Logout</a></li>
+        <ul class="nav navbar-nav navbar-right" ng-controller="AdminUserCtrl">
+            <li ng-if="loggedIn"><span class="username">{{ currentUser.email }}</span></li>
+            <li ng-if="loggedIn"><a ng-href="/trucks">Trucks</a></li>
+            <li ng-if="!loggedIn"><a ng-href="/login">Login</a></li>
+            <li ng-if="loggedIn"><a ng-href="/me">Admin</a></li>
+            <li ng-if="loggedIn"><a ng-href="/" ng-click="logout()" class="pr20 csrPointer">Logout</a></li>
         </ul>
     </nav>
-
+    <div ng-if="errors" class="errorMessage">Error: {{ errors }}<a ng-click="throwErrors(null)" class="csrPointer">X</a></div>
     <!-- ANGULAR DYNAMIC CONTENT -->
-    <div data-ng-view class="wFull hFull"></div>
+    <div ui-view class="wFull hFull"></div>
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

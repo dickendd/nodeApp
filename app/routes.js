@@ -82,7 +82,7 @@ module.exports = function(app, auth) {
 	});
 
 	// add more routes here
-	app.post('/api/trucks', function(req, res){
+	app.post('/api/trucks', ensureAuthorized, function(req, res){
 		var truck = new Truck();
 		truck.name = req.body.name;
 		truck.geo = req.body.geo;
@@ -151,13 +151,12 @@ module.exports = function(app, auth) {
 function ensureAuthorized(req, res, next) {
     var bearerToken;
     var bearerHeader = req.headers["authorization"];
-
     if (typeof bearerHeader !== 'undefined') {
         var bearer = bearerHeader.split(" ");
         bearerToken = bearer[1];
         req.token = bearerToken;
         next();
     } else {
-        res.send(403);
+    	res.send(403);
     }
 }

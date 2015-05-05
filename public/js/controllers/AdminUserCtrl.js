@@ -4,23 +4,32 @@ angular.module('truckApp')
         '$scope',
     	'$location', 
         '$window', 
-    	'AuthService',
-    	function($rootScope, $scope, $location, $window, AuthService) {
+    	'AuthService', 
+        'AUTH_EVENTS', 
+        'Session', 
+    	function($rootScope, $scope, $location, $window, AuthService, AUTH_EVENT, Session) {
+            $scope.credentials = {
+                username: '',
+                password: ''
+            };
+
     		$scope.login = function() {
                 var formData = {
                     email: $scope.email,
                     password: $scope.password
                 }
 
-                AuthService.login(formData, function(res) {
-                    if (res.type == false) {
-                        alert(res.data);
+                AuthService.login(formData).then(function(res) {
+                    if (res.data.type == false) {
+                        $scope.throwErrors(res.data.data);
                     } else {
-                        $window.sessionStorage.token = res.data.token;
-                        window.location = '/';
+                        $scope.throwErrors(null);
+                        $scope.setCurrentUser(res.data.data);
+                        $scope.setLoggedIn(true);
+                        // window.location = '/';
                     }
                 }, function() {
-                    $rootScope.error = 'Failed to log in';
+                    $scope.throwErrors(AUTH_EVENTS.loginFailed);
                 })
             };
 
@@ -51,12 +60,12 @@ angular.module('truckApp')
             };
      
             $scope.logout = function() {
-                AuthService.logout(function() {
-                    window.location = "/"
-                }, function() {
-                    alert("Failed to log out!");
-                });
+                Session.destroy();
+                $scope.setCurrentUser(null);
+                $scope.setLoggedIn(false);
+                window.location = "/";
             };
+
             $scope.token = $window.sessionStorage.token;
     	}
     ]);

@@ -5,7 +5,8 @@ angular.module('truckApp').controller('MapCtrl',
 	'uiGmapGoogleMapApi', 
 	'uiGmapIsReady', 
 	'$q',
-	function($scope, TruckService, LocationService, uiGmapGoogleMapApi, uiGmapIsReady, $q){
+	'AuthService',
+	function($scope, TruckService, LocationService, uiGmapGoogleMapApi, uiGmapIsReady, $q, AuthService){
 
 		uiGmapGoogleMapApi.then(function (maps) {
 	        $scope.googlemap = {};

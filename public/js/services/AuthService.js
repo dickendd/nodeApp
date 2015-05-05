@@ -1,10 +1,11 @@
 angular.module('truckApp')
-    .factory('AuthService', ['$http', '$window', function($http, $window){
+    .factory('AuthService', ['$http', '$window', 'Session', function($http, $window, Session){
+        var authService = {};
         var baseUrl = "";
         function changeUser(user) {
             angular.extend(currentUser, user);
         }
- 
+
         function urlBase64Decode(str) {
             var output = str.replace('-', '+').replace('_', '/');
             switch (output.length % 4) {
@@ -33,22 +34,30 @@ angular.module('truckApp')
         }
  
         var currentUser = getUserFromToken();
- 
-        return {
-            save: function(data, success, error) {
+
+        authService.save = function(data, success, error) {
                 $http.post(baseUrl + '/signup', data).success(success).error(error)
-            },
-            login: function(data, success, error) {
-                $http.post(baseUrl + '/login', data).success(success).error(error)
-            },
-            me: function(success, error) {
-                $http.get(baseUrl + '/me').success(success).error(error)
-            },
-            logout: function(success) {
-                changeUser({});
-                delete $window.sessionStorage.token;
-                success();
-            }
+            };
+        authService.login = function(data, success, error) {
+            return $http.post(baseUrl + '/login', data).success(function (res) {
+                Session.create(res.data.token, res.data._id, res.data.role);
+                return res;
+            });
         };
+        authService.me = function(success, error) {
+            $http.get(baseUrl + '/me').success(success).error(error)
+        };
+        authService.isAuthenticated = function() {
+            return !!Session.userId;
+        };
+        authService.isAuthorized = function(authorizedRoles) {
+            if (!angular.isArray(authorizedRoles)) {
+              authorizedRoles = [authorizedRoles];
+            }
+            return (authService.isAuthenticated() &&
+              authorizedRoles.indexOf(Session.userRole) !== -1);
+        };
+ 
+        return authService
     }
 ]);

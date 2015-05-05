@@ -19,3 +19,21 @@ html, body {
 .hFull { calc(100vh - 50px); }
 .wFull { width: 100%; }
 .csrPointer { cursor: pointer;}
+.errorMessage {
+	background-color: #F00; 
+	color: #FFF;
+	padding: 10px;
+}
+.username {
+	color: #D4650B;
+}
+.nav > li > span {
+  position: relative;
+  display: block;
+  padding: 15px;
+}
+.navbar-nav > li > span {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  line-height: 20px;
+}
