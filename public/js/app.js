@@ -20,7 +20,7 @@ var app = angular.module('truckApp', ['ui.router', 'uiGmapgoogle-maps', 'ngStora
 	          templateUrl: 'views/map.html',
 	          controller: 'MapCtrl',
 	          data: {
-	          	authorizedRoles: [USER_ROLES.user, USER_ROLES.admin]
+	            authorizedRoles: [USER_ROLES.all]
 	          }
 	        })
 	        .state('trucks', {
@@ -28,7 +28,7 @@ var app = angular.module('truckApp', ['ui.router', 'uiGmapgoogle-maps', 'ngStora
 	          templateUrl: 'views/truck.html',
 	          controller: 'TruckCtrl',
 	          data: {
-	            authorizedRoles: USER_ROLES.admin
+	            authorizedRoles: [USER_ROLES.user, USER_ROLES.admin]
 	          }
 	        })
 	        .state('login', {
@@ -36,7 +36,7 @@ var app = angular.module('truckApp', ['ui.router', 'uiGmapgoogle-maps', 'ngStora
 	          templateUrl: 'views/login.html',
 	          controller: 'AdminUserCtrl',
 	          data: {
-	          	authorizedRoles: [USER_ROLES.user, USER_ROLES.admin]
+	            authorizedRoles: [USER_ROLES.all]
 	          }
 	        })
 	        .state('signup', {
@@ -44,7 +44,7 @@ var app = angular.module('truckApp', ['ui.router', 'uiGmapgoogle-maps', 'ngStora
 	          templateUrl: 'views/signup.html',
 	          controller: 'AdminUserCtrl',
 	          data: {
-	          	authorizedRoles: [USER_ROLES.user, USER_ROLES.admin]
+	          	authorizedRoles: [USER_ROLES.admin]
 	          }
 	        })
 	        .state('me', {
@@ -61,23 +61,32 @@ var app = angular.module('truckApp', ['ui.router', 'uiGmapgoogle-maps', 'ngStora
 	    $locationProvider.html5Mode(true);
 	}]);
 
-angular.module('truckApp').run(['$rootScope', '$state', 'AUTH_EVENTS', 'AuthService', function($rootScope, $state, AUTH_EVENTS, AuthService){
+	angular.module('truckApp').run(
+		['$rootScope', 
+		'$state', 
+		'AUTH_EVENTS', 
+		'USER_ROLES', 
+		'AuthService', 
+		'$location', 
+		'$http', function($rootScope, $state, AUTH_EVENTS, USER_ROLES, AuthService, $location){
         $rootScope.$on('$stateChangeStart', function (event, next, toParams, fromState, fromParams) {
             if (next.data) {
                 var authorizedRoles = next.data.authorizedRoles;
             } else {
-                var authorizedRoles = 'ALL';
+                var authorizedRoles = [USER_ROLES.all];
             }
             if (!AuthService.isAuthorized(authorizedRoles) && next.name !== 'login' && next.name !== 'index' && next.name !== 'signup') {
-                event.preventDefault();
+                // event.preventDefault();
                 if (AuthService.isAuthenticated()) {
                 	console.log('not authorized');
                     // user is not allowed
-                    $rootScope.$broadcast(AUTH_EVENTS.notAuthorized);
+                    $rootScope.errors = AUTH_EVENTS.notAuthorized;
+                    $location.path('/');
                 } else {
                 	console.log('not authenticated');
                     // user is not logged in
-                    $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
+                    $rootScope.errors = AUTH_EVENTS.notAuthenticated;
+                    $location.path('/login');
                 }
             }
         });

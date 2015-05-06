@@ -4,7 +4,8 @@ angular.module('truckApp').controller('TruckCtrl',
 	'TruckService', 
 	'LocationService',
 	'Geocoder',
-	function($scope, TruckService, LocationService, Geocoder) {
+	'$window', 
+	function($scope, TruckService, LocationService, Geocoder, $window) {
 
 		$scope.truckService = TruckService;
 		$scope.locationService = LocationService;
@@ -40,7 +41,7 @@ angular.module('truckApp').controller('TruckCtrl',
 		}
 
 		function getUserTruck(){
-			$scope.truckService.getByUser($scope.currentUser._id)
+			$scope.truckService.getByUser($window.sessionStorage.userId)
 				.success(function(truck){
 					$scope.userTrucks= truck;
 
@@ -94,11 +95,10 @@ angular.module('truckApp').controller('TruckCtrl',
 
 				geo.coords = $scope.position.coords;
 
-				createTruck($scope.newTruck.name, null, geo, $scope.newTruck.windowCopy, $scope.newTruck.menuUrl, $scope.currentUser._id);
+				createTruck($scope.newTruck.name, null, geo, $scope.newTruck.windowCopy, $scope.newTruck.menuUrl, $window.sessionStorage.userId);
 
 			} else {
 				alert('No location found, please allow us to see your location, or input an address.');
-				console.log(errors);
 				return;
 			}
 		}

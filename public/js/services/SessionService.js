@@ -1,12 +1,12 @@
-angular.module('truckApp').service('Session', function () {
+angular.module('truckApp').service('Session', function ($window) {
   this.create = function (sessionId, userId, userRole) {
-    this.id = sessionId;
-    this.userId = userId;
-    this.userRole = userRole;
+    $window.sessionStorage.id = sessionId;
+    $window.sessionStorage.userId = userId;
+    $window.sessionStorage.userRole = userRole;
   };
   this.destroy = function () {
-    this.id = null;
-    this.userId = null;
-    this.userRole = null;
+    $window.sessionStorage.id = null;
+    $window.sessionStorage.userId = null;
+    $window.sessionStorage.userRole = null;
   };
 })

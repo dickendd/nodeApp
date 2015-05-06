@@ -45,13 +45,14 @@ module.exports = function(app, auth) {
 	                var userModel = new User();
 	                userModel.email = req.body.email;
 	                userModel.password = req.body.password;
+	                userModel.role = req.body.role;
 	                userModel.save(function(err, user) {
 	                    user.token = jwt.sign(user, auth.secret);
 	                    user.save(function(err, user1) {
 	                        res.json({
 	                            type: true,
 	                            data: user1,
-	                            token: user1.token
+	                            token: user1.token,
 	                        });
 	                    });
 	                })

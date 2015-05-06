@@ -25,8 +25,8 @@ angular.module('truckApp')
                     } else {
                         $scope.throwErrors(null);
                         $scope.setCurrentUser(res.data.data);
+                        $window.sessionStorage.token = res.data.token;
                         $scope.setLoggedIn(true);
-                        // window.location = '/';
                         $location.path('/trucks');
                     }
                 }, function() {
@@ -37,7 +37,8 @@ angular.module('truckApp')
             $scope.signup = function() {
                 var formData = {
                     email: $scope.email,
-                    password: $scope.password
+                    password: $scope.password,
+                    role: 'USER'
                 }
 
                 AuthService.save(formData, function(res) {
@@ -62,9 +63,10 @@ angular.module('truckApp')
      
             $scope.logout = function() {
                 Session.destroy();
+                $window.sessionStorage.clear();
                 $scope.setCurrentUser(null);
                 $scope.setLoggedIn(false);
-                window.location = "/";
+                $location.path('/');
             };
 
             $scope.token = $window.sessionStorage.token;

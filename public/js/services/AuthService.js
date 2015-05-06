@@ -35,6 +35,12 @@ angular.module('truckApp')
  
         var currentUser = getUserFromToken();
 
+        $window.sessionStorage.userId = currentUser._id;
+        $window.sessionStorage.userRole = currentUser.role;
+
+        authService.getCurrentUser = function() {
+            return getUserFromToken();
+        };
         authService.save = function(data, success, error) {
                 $http.post(baseUrl + '/signup', data).success(success).error(error)
             };
@@ -48,14 +54,14 @@ angular.module('truckApp')
             $http.get(baseUrl + '/me').success(success).error(error)
         };
         authService.isAuthenticated = function() {
-            return !!Session.userId;
+            return !!$window.sessionStorage.userId;
         };
         authService.isAuthorized = function(authorizedRoles) {
             if (!angular.isArray(authorizedRoles)) {
               authorizedRoles = [authorizedRoles];
             }
             return (authService.isAuthenticated() &&
-              authorizedRoles.indexOf(Session.userRole) !== -1);
+              authorizedRoles.indexOf($window.sessionStorage.userRole) !== -1);
         };
  
         return authService
