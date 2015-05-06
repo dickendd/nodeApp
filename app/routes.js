@@ -88,6 +88,7 @@ module.exports = function(app, auth) {
 		truck.geo = req.body.geo;
 		truck.windowCopy = req.body.windowCopy;
 		truck.menuUrl = req.body.menuUrl;
+		truck.createdBy = req.body.createdBy;
 
 		truck.save(function(err){
 			if (err) {
@@ -106,6 +107,15 @@ module.exports = function(app, auth) {
 		});
 	});
 
+	app.get('/api/trucks/user/:createdBy', function(req, res){
+		Truck.find({'createdBy': req.params.createdBy}, function(err, truck){
+			if (err) {
+				res.send(err);
+			}
+			res.json(truck);
+		});
+	});
+
 	app.get('/api/trucks/:truck_id', function(req, res){
 		Truck.findById(req.params.truck_id, function(err, truck){
 			if (err) {
@@ -120,6 +130,7 @@ module.exports = function(app, auth) {
 			if (err) {
 				res.send(err);
 			}
+			truck.windowCopy = req.body.windowCopy;
 			truck.windowUrl = req.body.windowUrl;
 			truck.save(function(err){
 				if (err) {

@@ -46,9 +46,8 @@
         <!-- LINK TO OUR PAGES. ANGULAR HANDLES THE ROUTING HERE -->
         <ul class="nav navbar-nav navbar-right" ng-controller="AdminUserCtrl">
             <li ng-if="loggedIn"><span class="username">{{ currentUser.email }}</span></li>
-            <li ng-if="loggedIn"><a ng-href="/trucks">Trucks</a></li>
+            <li ng-if="loggedIn"><a ng-href="/trucks">My Truck</a></li>
             <li ng-if="!loggedIn"><a ng-href="/login">Login</a></li>
-            <li ng-if="loggedIn"><a ng-href="/me">Admin</a></li>
             <li ng-if="loggedIn"><a ng-href="/" ng-click="logout()" class="pr20 csrPointer">Logout</a></li>
         </ul>
     </nav>

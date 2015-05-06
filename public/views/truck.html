@@ -1,35 +1,37 @@
 <div class="container">
-    <div class="jumbotron row" ng-controller="TruckCtrl">
+    <div class="jumbotron row">
         <div class="col-lg-12 text-center">
             <h1>Food Trucks</h1>
         </div>
-        <div class="col-lg-12 mb20">
-            <form data-ng-submit="" class="form-inline">
-                <h2>Use my current location (GPS):</h2>
+        <div ng-if="!userHasTrucks">
+            <div class="col-lg-12 mb20">
+                <form data-ng-submit="" class="form-inline">
+                    <h2>Add your food truck:</h2>
+                </form>
+            </div>
+            <form data-ng-submit="formSubmit(navigator.geolocation)">
+                <div class="col-lg-12 mb20">
+                    <input type="text" name="name" class="form-control" ng-model="newTruck.name" placeholder="Name">
+                </div>
+                <div class="col-lg-12 mb20">
+                    <input type="text" name="windowCopy" class="form-control" ng-model="newTruck.windowCopy" placeholder="Copy">
+                </div>
+                <div class="col-lg-12 mb20">
+                    <input type="text" name="url" class="form-control" ng-model="newTruck.menuUrl" placeholder="URL">
+                </div>
+                <div class="col-lg-12 mb20">
+                    <h2>Use an address, or leave blank to use your current location:</h2>
+                    <input type="text" name="address" class="form-control" ng-model="address" placeholder="e.g. 500 Granby Street, Norfolk, VA OR Plume Street at Bank Street, Norfolk, VA">
+                </div>
+                <span class="col-lg-12">
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </span>
             </form>
         </div>
-        <form data-ng-submit="formSubmit(navigator.geolocation)">
-            <div class="col-lg-12 mb20">
-                <input type="text" name="name" class="form-control" ng-model="truck.name" placeholder="Name">
-            </div>
-            <div class="col-lg-12 mb20">
-                <input type="text" name="windowCopy" class="form-control" ng-model="truck.windowCopy" placeholder="Copy">
-            </div>
-            <div class="col-lg-12 mb20">
-                <input type="text" name="url" class="form-control" ng-model="truck.menuUrl" placeholder="URL">
-            </div>
-            <div class="col-lg-12 mb20">
-                <h2>Use an address, or leave blank to use your current location:</h2>
-                <input type="text" name="address" class="form-control" ng-model="address" placeholder="e.g. 500 Granby Street, Norfolk, VA OR Plume Street at Bank Street, Norfolk, VA">
-            </div>
-            <span class="col-lg-12">
-                <button type="submit" class="btn btn-primary">Add</button>
-            </span>
-        </form>
-        <div class="col-lg-12 mb20">
+        <div ng-if="userHasTrucks" class="col-lg-12 mb20">
             <h2 class="mb20">Change your name or update your location:</h2>
             <ul class="list-unstyled">
-        	    <li ng-repeat="truck in trucks" class="col-lg-12 mb20">
+        	    <li class="col-lg-12 mb20" ng-repeat="truck in userTrucks">
                     <div class="col-lg-8 p5">
                         <span>{{ truck.name }}</span>
                         <span style="margin-left: 20px;">Lat: {{ truck.geo.coords.latitude }}, Long: {{ truck.geo.coords.longitude }}</span>
@@ -37,7 +39,7 @@
                         <a href="{{ truck.menuUrl }}">Menu URL</a>
                         <span ng-click="deleteTruck(truck._id)" style="cursor: pointer; margin-left: 20px;"> X</span>
                     </div>
-                    <form data-ng-submit="editTruck(truck._id, truck.windowCopy, position)" class="col-lg-4">
+                    <form data-ng-submit="editTruck(truck._id, truck.name, truck.windowCopy, position)" class="col-lg-4">
                         <div class="input-group">
                             <span class="input-group-btn">
                                 <button type="submit" class="btn btn-default" ng-click="updateLocation()"><span class="glyphicon glyphicon-record"></span> Update</button>

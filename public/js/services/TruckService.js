@@ -7,6 +7,10 @@ angular.module('truckApp').factory('TruckService', ['$http', function($http) {
             return $http.get('/api/trucks');
         },
 
+        getByUser : function(userId) {
+            return $http.get('/api/trucks/user/' + userId);
+        },
+
         // these will work when more API routes are defined on the Node side of things
         // call to POST and create a new truck
         create : function(truckData) {

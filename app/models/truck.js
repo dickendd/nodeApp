@@ -12,7 +12,8 @@ var TruckSchema = new Schema({
         }
 	},
 	windowCopy: String,
-	menuUrl: String
+	menuUrl: String,
+	createdBy: String
 });
 
 module.exports = mongoose.model('Truck', TruckSchema);

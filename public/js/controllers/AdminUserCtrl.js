@@ -7,7 +7,7 @@ angular.module('truckApp')
     	'AuthService', 
         'AUTH_EVENTS', 
         'Session', 
-    	function($rootScope, $scope, $location, $window, AuthService, AUTH_EVENT, Session) {
+    	function($rootScope, $scope, $location, $window, AuthService, AUTH_EVENTS, Session) {
             $scope.credentials = {
                 username: '',
                 password: ''
@@ -27,6 +27,7 @@ angular.module('truckApp')
                         $scope.setCurrentUser(res.data.data);
                         $scope.setLoggedIn(true);
                         // window.location = '/';
+                        $location.path('/trucks');
                     }
                 }, function() {
                     $scope.throwErrors(AUTH_EVENTS.loginFailed);
