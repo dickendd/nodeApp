@@ -11,13 +11,13 @@ html, body {
 }
 .balance { margin-left: auto; margin-right: auto;}
 .p5 { padding: 5px; }
-.p20 { padding: 20px; }
+.p10 { padding: 10px; }
 .pr20 { padding-right: 20px;}
 .mb10 { margin-bottom: 10px; }
 .mb20 { margin-bottom: 20px; }
 .mb0 { margin-bottom: 0px; }
 .bdrRad0 { border-radius: 0px; }
-.hFull { calc(100vh - 50px); }
+.hFull { calc(100vh - 110px); }
 .wFull { width: 100%; }
 .txtC { text-align: center; }
 .csrPointer { cursor: pointer;}
