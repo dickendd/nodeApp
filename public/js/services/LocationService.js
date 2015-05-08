@@ -4,12 +4,12 @@ angular.module('truckApp')
         var latLong = null;
         
         var getLatLong = function(refresh) {
-            
+            console.log('getting lat lng');
             var deferred = $q.defer();
             
             navigator.geolocation.getCurrentPosition(function(pos) {
-                latLong =  { 'lat' : pos.coords.latitude, 'long' : pos.coords.longitude } 
-                deferred.resolve(latLong);
+                console.log('got it!');
+                deferred.resolve(pos);
 
             }, function(error) {
                 latLong = null

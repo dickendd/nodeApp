@@ -8,24 +8,7 @@ angular.module('truckApp').controller('MapCtrl',
 	'AuthService',
 	function($scope, TruckService, LocationService, uiGmapGoogleMapApi, uiGmapIsReady, $q, AuthService){
 
-		uiGmapGoogleMapApi.then(function (maps) {
-	        $scope.googlemap = {};
-	        $scope.map = {
-	            center: {
-	                latitude: 36.86,
-	                longitude: -76.29
-	            },
-	            zoom: 15,
-	            pan: 1,
-	            options: $scope.mapOptions,
-	            control: {},
-	            events: {
-	                tilesloaded: function (maps, eventName, args) {},
-	                dragend: function (maps, eventName, args) {},
-	                zoom_changed: function (maps, eventName, args) {}
-	            }
-	        };
-	    });
+		
 
 		$scope.truckService = TruckService;
 		$scope.locationService = LocationService;
@@ -58,14 +41,35 @@ angular.module('truckApp').controller('MapCtrl',
 			$scope.windowOptions.visible = false;
 		}
 
-		// getTrucks();
-		$scope.locationService.getLatLong().then(function(latLong){
-			$scope.position = {
-				coords: {
-					latitude: latLong.lat, 
-					longitude: latLong.long
+		uiGmapGoogleMapApi.then(function(){
+			console.log('map ready');
+			$scope.locationService.getLatLong().then(function(latLong){
+				console.log('got lat and lng');
+				$scope.position = {
+					coords: {
+						latitude: latLong.coords.latitude, 
+						longitude: latLong.coords.longitude
+					}
 				}
-			}
+			}).then(function (maps) {
+				console.log('init map');
+		        $scope.googlemap = {};
+		        $scope.map = {
+		            center: {
+		                latitude: $scope.position.coords.latitude,
+		                longitude: $scope.position.coords.longitude
+		            },
+		            zoom: 15,
+		            pan: 1,
+		            options: $scope.mapOptions,
+		            control: {},
+		            events: {
+		                tilesloaded: function (maps, eventName, args) {},
+		                dragend: function (maps, eventName, args) {},
+		                zoom_changed: function (maps, eventName, args) {}
+		            }
+		        };
+		    });
 		})
 
 		function createMarkers(trucks){
@@ -148,7 +152,7 @@ angular.module('truckApp').controller('MapCtrl',
 
 	    uiGmapIsReady.promise() // if no value is put in promise() it defaults to promise(1)
 	    .then(function (instances) {
-	        centerMap();
+	        // centerMap();
 	        getTrucks()
 	        .then(function(trucks){
 	        	createMarkers(trucks)
