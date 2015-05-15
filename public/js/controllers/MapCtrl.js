@@ -66,7 +66,7 @@ angular.module('truckApp').controller('MapCtrl',
 		            }
 		        };
 		    });
-		})
+		});
 
 		function createMarkers(trucks){
 			var deferred = $q.defer();

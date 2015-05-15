@@ -64,3 +64,13 @@ html, body {
 .truckContainer:hover {
 	background-color: #dfdfdf;
 }
+@media (max-width: 768px) {
+	.footer {
+		display: none;
+	}
+}
+@media (min-width: 800px) {
+	.nav > li.contactLink {
+		display: none;
+	}
+}
