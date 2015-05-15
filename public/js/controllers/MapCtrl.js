@@ -30,6 +30,7 @@ angular.module('truckApp').controller('MapCtrl',
 		$scope.onClick = function(data){
 			$scope.title = data.title;
 			$scope.windowCopy = data.windowCopy;
+			$scope.address = data.address;
 			$scope.menuUrl = data.menuUrl;
 			$scope.windowOptions.visible = !$scope.windowOptions.visible;
 			$scope.windowOptions.pixelOffset = new window.google.maps.Size(0, -35);
@@ -40,9 +41,7 @@ angular.module('truckApp').controller('MapCtrl',
 		}
 
 		uiGmapGoogleMapApi.then(function(){
-			// console.log('map ready');
 			$scope.locationService.getLatLong().then(function(latLong){
-				// console.log('got lat and lng');
 				$scope.position = {
 					coords: {
 						latitude: latLong.coords.latitude, 
@@ -50,7 +49,6 @@ angular.module('truckApp').controller('MapCtrl',
 					}
 				}
 			}).then(function (maps) {
-				// console.log('init map');
 		        $scope.googlemap = {};
 		        $scope.map = {
 		            center: {
@@ -75,8 +73,9 @@ angular.module('truckApp').controller('MapCtrl',
 			var markers = [];
 
 			for(var i = 0; i < trucks.length; i++){
-				var lat = trucks[i].geo.coords.latitude;
-				var lng = trucks[i].geo.coords.longitude;
+				var lat = trucks[i].geo.coordinates[1];
+				var lng = trucks[i].geo.coordinates[0];
+				var address = trucks[i].address;
 				var name = trucks[i].name;
 				var windowCopy = trucks[i].windowCopy;
 				var menuUrl = trucks[i].menuUrl;
@@ -85,6 +84,7 @@ angular.module('truckApp').controller('MapCtrl',
 					id: id,
 					options: {
 		                title: name,
+		                address: address,
 		                windowCopy: windowCopy,
 		                menuUrl: menuUrl,
 		                icon: '../images/FoodTruckIcon.png'
@@ -151,7 +151,6 @@ angular.module('truckApp').controller('MapCtrl',
 
 	    uiGmapIsReady.promise()
 	    .then(function (instances) {
-	        // centerMap();
 	        getTrucks()
 	        .then(function(trucks){
 	        	createMarkers(trucks)
