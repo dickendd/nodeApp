@@ -40,33 +40,26 @@ angular.module('truckApp').controller('MapCtrl',
 			$scope.windowOptions.visible = false;
 		}
 
-		uiGmapGoogleMapApi.then(function(){
-			$scope.locationService.getLatLong().then(function(latLong){
-				$scope.position = {
-					coords: {
-						latitude: latLong.coords.latitude, 
-						longitude: latLong.coords.longitude
-					}
-				}
-			}).then(function (maps) {
-		        $scope.googlemap = {};
-		        $scope.map = {
-		            center: {
-		                latitude: $scope.position.coords.latitude,
-		                longitude: $scope.position.coords.longitude
-		            },
-		            zoom: 15,
-		            pan: 1,
-		            options: $scope.mapOptions,
-		            control: {},
-		            events: {
-		                tilesloaded: function (maps, eventName, args) {},
-		                dragend: function (maps, eventName, args) {},
-		                zoom_changed: function (maps, eventName, args) {}
-		            }
-		        };
-		    });
-		});
+		uiGmapGoogleMapApi.then(function(maps){
+	        $scope.googlemap = {};
+	        $scope.map = {
+	            center: {
+	                latitude: 36.8458816,
+	                longitude: -76.2884479
+	            },
+	            zoom: 12,
+	            pan: 1,
+	            options: $scope.mapOptions,
+	            control: {},
+	            events: {
+	                tilesloaded: function (maps, eventName, args) {},
+	                dragend: function (maps, eventName, args) {},
+	                zoom_changed: function (maps, eventName, args) {}
+	            }
+	        };
+
+
+	    });
 
 		function createMarkers(trucks){
 			var deferred = $q.defer();
@@ -131,16 +124,16 @@ angular.module('truckApp').controller('MapCtrl',
 		    if(!$scope.map) {
 	            return;
 	        }
-	        
 	        $scope.locationService.getLatLong().then(
 	            function(latLong) {
 	                $scope.latLong = latLong;
 	                
 	                $scope.map.center = {
-	                	latitude: latLong.lat, 
-	                	longitude: latLong.long
+	                	latitude: latLong.coords.latitude, 
+	                	longitude: latLong.coords.longitude
 	                };
 
+	                $scope.map.zoom = 15;
 	            },
 	            
 	            function(error) {
@@ -149,12 +142,15 @@ angular.module('truckApp').controller('MapCtrl',
 	        )
 		};
 
+		$scope.centerMap = centerMap;
+
 	    uiGmapIsReady.promise()
 	    .then(function (instances) {
 	        getTrucks()
 	        .then(function(trucks){
 	        	createMarkers(trucks)
 	        	.then(function(markers){
+	        		centerMap();
 	        		$scope.addMarkerClickFunction(markers);
 	        	});
 	        });
