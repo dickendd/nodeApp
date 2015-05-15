@@ -64,12 +64,19 @@ html, body {
 .truckContainer:hover {
 	background-color: #dfdfdf;
 }
+.tacoIcon {
+	margin: 5px 20px 0 0;
+}
 @media (max-width: 768px) {
 	.footer {
 		display: none;
 	}
+	.tacoIcon {
+		margin-left: 20px;
+		margin-right: 0;
+	}
 }
-@media (min-width: 800px) {
+@media (min-width: 768px) {
 	.nav > li.contactLink {
 		display: none;
 	}
