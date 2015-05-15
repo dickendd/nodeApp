@@ -54,7 +54,12 @@ html, body {
 }
 
 .infoWindow {
-	max-width: 250px;
+	width: 250px;
+	height: 150px;
+}
+.infoWindow .address {
+	color: #6f6f6f;
+	font-size: 12px;
 }
 .truckContainer:hover {
 	background-color: #dfdfdf;
