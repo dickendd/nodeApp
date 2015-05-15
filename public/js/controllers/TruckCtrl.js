@@ -27,8 +27,17 @@ angular.module('truckApp').controller('TruckCtrl',
 			createdBy: null
 		};
 		$scope.userHasTrucks = false;
-
 		$scope.userTrucks = [];
+		$scope.editingTruck = false;
+		$scope.mouseOver = false;
+
+		$scope.setEditing = function(){
+			if (!$scope.editingTruck) {
+				$scope.editingTruck = true;
+			} else {
+				$scope.editingTruck = false;
+			}
+		}
 
 		function getTrucks(){
 			$scope.truckService.get()
@@ -56,12 +65,7 @@ angular.module('truckApp').controller('TruckCtrl',
 
 		$scope.updateLocation = function(){
 			$scope.locationService.getLatLong().then(function(latLong){
-				$scope.position = {
-					coords: {
-						latitude: latLong.lat, 
-						longitude: latLong.long
-					}
-				}
+				$scope.position = latLong;
 			});
 		}
 
@@ -78,14 +82,15 @@ angular.module('truckApp').controller('TruckCtrl',
 			};
 			var errors = [];
 
-			if($scope.address !== null && $scope.address !== '' && $scope.address !== 'undefined'){
-				$scope.geocoderService.codeAddress($scope.address).then(
+			if($scope.newTruck.address !== null && $scope.newTruck.address !== '' && $scope.newTruck.address !== 'undefined'){
+
+				$scope.geocoderService.codeAddress($scope.newTruck.address).then(
 					function(response){
 
-						geo.coords.latitude = response[0].geometry.location.k;
-						geo.coords.longitude = response[0].geometry.location.D;
+						geo.coords.latitude = response[0].geometry.location.lat();
+						geo.coords.longitude = response[0].geometry.location.lng();
 
-						createTruck($scope.newTruck.name, $scope.address, geo, $scope.newTruck.windowCopy, $scope.newTruck.menuUrl, $scope.currentUser._id);
+						createTruck($scope.newTruck.name, $scope.newTruck.address, geo, $scope.newTruck.windowCopy, $scope.newTruck.menuUrl, $scope.currentUser._id);
 					}, 
 					function(error){
 						errors.push(error);
@@ -93,7 +98,8 @@ angular.module('truckApp').controller('TruckCtrl',
 
 			} else if($scope.position != null){
 
-				geo.coords = $scope.position.coords;
+				geo.coords.latitude = $scope.position.coords.latitude;
+				geo.coords.longitude = $scope.position.coords.longitude;
 
 				createTruck($scope.newTruck.name, null, geo, $scope.newTruck.windowCopy, $scope.newTruck.menuUrl, $window.sessionStorage.userId);
 
@@ -132,18 +138,23 @@ angular.module('truckApp').controller('TruckCtrl',
 
 		$scope.createTruck = createTruck;
 
-		$scope.editTruck = function(truckId, truckName, windowCopy, coords){
+		$scope.editTruck = function(truckId, truckName, windowCopy, menuUrl, coords, callback){
 			$scope.truckService.update(truckId, { 
 				name: truckName,
 				geo: {
 					type: 'Point',
-					coords: coords
+					coords: {
+						latitude: coords.coords.latitude,
+						longitude: coords.coords.longitude
+					}
 				},
-				windowCopy: windowCopy
+				windowCopy: windowCopy,
+				menuUrl: menuUrl
 			})
 				.success(function(trucks){
 					$scope.status = 'Successfully edited truck';
 					getUserTruck();
+					callback();
 				})
 				.error(function(err){
 					$scope.status = 'Something went wrong: ' + err.message;
@@ -155,6 +166,7 @@ angular.module('truckApp').controller('TruckCtrl',
 				.success(function(trucks){
 					$scope.status = 'Successfully removed truck';
 					getUserTruck();
+					$scope.updateLocation();
 				})
 				.error(function(err){
 					$scope.status = 'Something went wrong: ' + err.message;

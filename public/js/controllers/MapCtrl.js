@@ -8,8 +8,6 @@ angular.module('truckApp').controller('MapCtrl',
 	'AuthService',
 	function($scope, TruckService, LocationService, uiGmapGoogleMapApi, uiGmapIsReady, $q, AuthService){
 
-		
-
 		$scope.truckService = TruckService;
 		$scope.locationService = LocationService;
 		$scope.trucks;
@@ -42,9 +40,9 @@ angular.module('truckApp').controller('MapCtrl',
 		}
 
 		uiGmapGoogleMapApi.then(function(){
-			console.log('map ready');
+			// console.log('map ready');
 			$scope.locationService.getLatLong().then(function(latLong){
-				console.log('got lat and lng');
+				// console.log('got lat and lng');
 				$scope.position = {
 					coords: {
 						latitude: latLong.coords.latitude, 
@@ -52,7 +50,7 @@ angular.module('truckApp').controller('MapCtrl',
 					}
 				}
 			}).then(function (maps) {
-				console.log('init map');
+				// console.log('init map');
 		        $scope.googlemap = {};
 		        $scope.map = {
 		            center: {
@@ -88,7 +86,8 @@ angular.module('truckApp').controller('MapCtrl',
 					options: {
 		                title: name,
 		                windowCopy: windowCopy,
-		                menuUrl: menuUrl
+		                menuUrl: menuUrl,
+		                icon: '../images/FoodTruckIcon.png'
 					},
 					coords: {
 		                latitude: lat,
@@ -150,7 +149,7 @@ angular.module('truckApp').controller('MapCtrl',
 	        )
 		};
 
-	    uiGmapIsReady.promise() // if no value is put in promise() it defaults to promise(1)
+	    uiGmapIsReady.promise()
 	    .then(function (instances) {
 	        // centerMap();
 	        getTrucks()

@@ -1,8 +1,5 @@
 <div class="container">
     <div class="jumbotron row">
-        <div class="col-lg-12 text-center">
-            <h1>Food Trucks</h1>
-        </div>
         <div ng-if="!userHasTrucks">
             <div class="col-lg-12 mb20">
                 <form data-ng-submit="" class="form-inline">
@@ -21,7 +18,7 @@
                 </div>
                 <div class="col-lg-12 mb20">
                     <h2>Use an address, or leave blank to use your current location:</h2>
-                    <input type="text" name="address" class="form-control" ng-model="address" placeholder="e.g. 500 Granby Street, Norfolk, VA OR Plume Street at Bank Street, Norfolk, VA">
+                    <input type="text" name="address" class="form-control" ng-model="newTruck.address" placeholder="e.g. 500 Granby Street, Norfolk, VA OR Plume Street at Bank Street, Norfolk, VA">
                 </div>
                 <span class="col-lg-12">
                     <button type="submit" class="btn btn-primary">Add</button>
@@ -29,25 +26,37 @@
             </form>
         </div>
         <div ng-if="userHasTrucks" class="col-lg-12 mb20">
-            <h2 class="mb20">Change your name or update your location:</h2>
+            <h2 class="mb20">Change your info or update your location:</h2>
             <ul class="list-unstyled">
-        	    <li class="col-lg-12 mb20" ng-repeat="truck in userTrucks">
+        	    <li class="col-lg-12 mb20 truckContainer pb10" ng-repeat="truck in userTrucks" ng-mouseover="mouseOver = true" ng-mouseleave="mouseOver = false">
+                    <span ng-click="deleteTruck(truck._id)" class="mt20 csrPointer right" ng-show="mouseOver">X Delete</span>
                     <div class="col-lg-8 p5">
-                        <span>{{ truck.name }}</span>
-                        <span style="margin-left: 20px;">Lat: {{ truck.geo.coords.latitude }}, Long: {{ truck.geo.coords.longitude }}</span>
+                        <h3>{{ truck.name }}</h3>
                         <p>Description: {{ truck.windowCopy }}</p>
-                        <a href="{{ truck.menuUrl }}">Menu URL</a>
-                        <span ng-click="deleteTruck(truck._id)" style="cursor: pointer; margin-left: 20px;"> X</span>
+                        <p>Lat: {{ truck.geo.coords.latitude }}, Long: {{ truck.geo.coords.longitude }}</p>
+                        <p>Website/Menu link: {{ truck.menuUrl }}</p>
+                        <button class="btn btn-default btn-primary" ng-click="setEditing()" ng-if="!editingTruck">Edit</button>
+                        <button class="btn btn-default btn-primary" ng-click="setEditing()" ng-if="editingTruck">Close</button>
                     </div>
-                    <form data-ng-submit="editTruck(truck._id, truck.name, truck.windowCopy, position)" class="col-lg-4">
-                        <div class="input-group">
-                            <span class="input-group-btn">
-                                <button type="submit" class="btn btn-default" ng-click="updateLocation()"><span class="glyphicon glyphicon-record"></span> Update</button>
-                            </span>
-                            <input type="text" name="windowCopy" ng-model="truck.windowCopy" placeholder="Enter new description" class="form-control" />
-                            <span class="input-group-btn">
-                                <button type="submit" class="btn btn-default btn-primary">Save</button>
-                            </span>
+                    <form ng-show="editingTruck" data-ng-submit="editTruck(truck._id, truck.name, truck.windowCopy, truck.menuUrl
+                    , position, setEditing)" class="col-lg-12">
+                        <div class="form-group">
+                            <label for="truckDescription">Description:</label> 
+                            <textarea id="truckDescription" cols="25" rows="3" class="form-control" ng-model="truck.windowCopy" placeholder="Enter new description"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="truckUrl">Website/Menu link:</label> 
+                            <input type="text" name="url" id="truckUrl" cols="25" rows="3" class="form-control" ng-model="truck.menuUrl" placeholder="Enter url here">
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-lg-6">    
+                                <span class="btn btn-default form-control" ng-click="updateLocation()">
+                                    <span class="glyphicon glyphicon-record"></span> Update Location
+                                </span>
+                            </div>
+                            <div class="col-lg-6">
+                                <button type="submit" class="btn btn-default btn-primary form-control">Save</button>
+                            </div>
                         </div>
                     </form>
         	    </li>

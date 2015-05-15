@@ -14,7 +14,9 @@ html, body {
 .p5 { padding: 5px; }
 .p10 { padding: 10px; }
 .pr20 { padding-right: 20px;}
+.pb10 { padding-bottom: 10px; }
 .mt5 { margin-top: 5px; }
+.mt20 { margin-top: 20px; }
 .mb10 { margin-bottom: 10px; }
 .mr20 { margin-right: 20px; }
 .mb20 { margin-bottom: 20px; }
@@ -24,6 +26,7 @@ html, body {
 .wFull { width: 100%; }
 .txtC { text-align: center; }
 .csrPointer { cursor: pointer;}
+.right { float: right; }
 .errorMessage {
 	background-color: #F00; 
 	color: #FFF;
@@ -48,4 +51,11 @@ html, body {
 }
 .bgBlack a {
 	color: #D4650B;
+}
+
+.infoWindow {
+	max-width: 250px;
+}
+.truckContainer:hover {
+	background-color: #dfdfdf;
 }

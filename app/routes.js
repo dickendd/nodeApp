@@ -84,6 +84,7 @@ module.exports = function(app, auth) {
 
 	// add more routes here
 	app.post('/api/trucks', ensureAuthorized, function(req, res){
+		console.log(req.body.geo);
 		var truck = new Truck();
 		truck.name = req.body.name;
 		truck.geo = req.body.geo;
@@ -131,8 +132,10 @@ module.exports = function(app, auth) {
 			if (err) {
 				res.send(err);
 			}
+
 			truck.windowCopy = req.body.windowCopy;
-			truck.windowUrl = req.body.windowUrl;
+			truck.menuUrl = req.body.menuUrl;
+			truck.geo.coords = req.body.geo.coords;
 			truck.save(function(err){
 				if (err) {
 					res.send(err);

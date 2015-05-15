@@ -23,7 +23,6 @@ angular.module('truckApp').controller('ApplicationCtrl', function ($rootScope, $
 
 	// Check if there is a currentUser to set loggedIn variable
 	if ($rootScope.currentUser._id) {
-		console.log('currentuser');
 		$scope.setLoggedIn(true);
 	}
 });
