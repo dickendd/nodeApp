@@ -1,7 +1,7 @@
 <div class="hFull wFull" ng-if="render">
     <ui-gmap-google-map center="map.center" zoom="map.zoom" events="map.events" class="hFull wFull">
     	<ui-gmap-window coords="mapOptions.markers.selected.coords" show="windowOptions.visible" options="windowOptions"
-	        closeClick="closeClick()" templateUrl="templateUrl" templateParameter="{title: title, windowCopy: windowCopy, menuUrl: menuUrl, address: address}"
+	        closeClick="closeClick()" templateUrl="templateUrl" templateParameter="{title: title, windowCopy: windowCopy, menuUrl: menuUrl, address: address, dateModified: dateModified}"
 	        >Title: {{ title }}
 		</ui-gmap-window>
 	    <ui-gmap-markers models="markers" coords="'coords'" idkey="'id'" options="'options'" events="'markers.events'" click="'onClick'"></ui-gmap-markers>

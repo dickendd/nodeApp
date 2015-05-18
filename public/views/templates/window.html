@@ -1,6 +1,9 @@
 <div class="infoWindow">
 	<h3>{{ parameter.title }}</h3>
-	<p class="address">{{ parameter.address | address }}</p>
+	<p class="address"><span class="glyphicon glyphicon-map-marker"></span>{{ parameter.address | address }}</p>
 	<p>{{ parameter.windowCopy }}</p>
-	<a href="{{ parameter.menuUrl }}">Menu</a>
+	<div class="menuLink">
+		<a class="btn btn-default btn-primary" href="{{ parameter.menuUrl }}">Menu</a>
+	</div>
+	<span class="dateModified">Last updated: {{ parameter.dateModified | date:'MMM dd, yyyy H:mm' }}</span>
 </div>

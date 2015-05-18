@@ -22,9 +22,10 @@ angular.module('truckApp').controller('TruckCtrl',
 			name: null,
 			address: null,
 			geo: null,
-			windowCopy: 'Infowindow copy',
-			menuUrl: 'Menu Url',
-			createdBy: null
+			windowCopy: null,
+			menuUrl: null,
+			createdBy: null,
+			dateModified: null
 		};
 		$scope.userHasTrucks = false;
 		$scope.userTrucks = [];
@@ -82,6 +83,8 @@ angular.module('truckApp').controller('TruckCtrl',
 			};
 			var errors = [];
 
+			$scope.dateModified = Date.now();
+
 			if($scope.newTruck.address !== null && $scope.newTruck.address !== '' && $scope.newTruck.address !== 'undefined'){
 
 				$scope.geocoderService.codeAddress($scope.newTruck.address).then(
@@ -90,7 +93,7 @@ angular.module('truckApp').controller('TruckCtrl',
 						geo.coordinates[0] = response[0].geometry.location.lng();
 						geo.coordinates[1] = response[0].geometry.location.lat();
 
-						createTruck($scope.newTruck.name, $scope.newTruck.address, geo, $scope.newTruck.windowCopy, $scope.newTruck.menuUrl, $scope.currentUser._id);
+						createTruck($scope.newTruck.name, $scope.newTruck.address, geo, $scope.newTruck.windowCopy, $scope.newTruck.menuUrl, $scope.currentUser._id, $scope.dateModified);
 					}, 
 					function(error){
 						errors.push(error);
@@ -103,7 +106,7 @@ angular.module('truckApp').controller('TruckCtrl',
 
 				$scope.geocoderService.codeLatLng(geo.coordinates[1], geo.coordinates[0]).then(function(response){
 					$scope.newTruck.address = response[0].formatted_address.split(', USA')[0];
-					createTruck($scope.newTruck.name, $scope.newTruck.address, geo, $scope.newTruck.windowCopy, $scope.newTruck.menuUrl, $window.sessionStorage.userId);
+					createTruck($scope.newTruck.name, $scope.newTruck.address, geo, $scope.newTruck.windowCopy, $scope.newTruck.menuUrl, $window.sessionStorage.userId, $scope.dateModified);
 				});
 			} else {
 				alert('No location found, please allow us to see your location, or input an address.');
@@ -112,9 +115,7 @@ angular.module('truckApp').controller('TruckCtrl',
 		}
 		$scope.formSubmit = formSubmit;
 
-		function createTruck(name, address, geo, windowCopy, menuUrl, createdBy){
-
-			// address = address || '';
+		function createTruck(name, address, geo, windowCopy, menuUrl, createdBy, dateModified){
 
 			$scope.truckService.create({ 
 				name: name,
@@ -122,7 +123,8 @@ angular.module('truckApp').controller('TruckCtrl',
 				geo: geo,
 				windowCopy: windowCopy,
 				menuUrl: menuUrl,
-				createdBy: createdBy
+				createdBy: createdBy,
+				dateModified: dateModified
 			})
 			.success(function(trucks){
 				$scope.status = 'Successfully added ' + $scope.newTruck.name;
@@ -131,6 +133,7 @@ angular.module('truckApp').controller('TruckCtrl',
 				$scope.newTruck.windowCopy = null;
 				$scope.newTruck.menuUrl = null;
 				$scope.newTruck.createdBy = null;
+				$scope.dateModified;
 				getUserTruck();
 			})
 			.error(function(err){
@@ -147,6 +150,8 @@ angular.module('truckApp').controller('TruckCtrl',
 				coordinates: []
 			};
 
+			var dateModified = Date.now();
+
 			if(address != '' && address != null){
 				$scope.geocoderService.codeAddress(address).then(
 					function(response){
@@ -157,7 +162,8 @@ angular.module('truckApp').controller('TruckCtrl',
 							geo: geo,
 							address: address,
 							windowCopy: windowCopy,
-							menuUrl: menuUrl
+							menuUrl: menuUrl,
+							dateModified: dateModified
 						})
 							.success(function(trucks){
 								$scope.status = 'Successfully edited truck';
@@ -178,7 +184,8 @@ angular.module('truckApp').controller('TruckCtrl',
 					geo: geo,
 					address: address,
 					windowCopy: windowCopy,
-					menuUrl: menuUrl
+					menuUrl: menuUrl,
+					dateModified: dateModified
 				})
 					.success(function(trucks){
 						$scope.status = 'Successfully edited truck';

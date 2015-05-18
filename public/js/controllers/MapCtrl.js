@@ -32,8 +32,9 @@ angular.module('truckApp').controller('MapCtrl',
 			$scope.windowCopy = data.windowCopy;
 			$scope.address = data.address;
 			$scope.menuUrl = data.menuUrl;
+			$scope.dateModified = data.dateModified;
 			$scope.windowOptions.visible = !$scope.windowOptions.visible;
-			$scope.windowOptions.pixelOffset = new window.google.maps.Size(0, -35);
+			$scope.windowOptions.pixelOffset = new window.google.maps.Size(0, -30);
 		}
 
 		$scope.closeClick = function(){
@@ -72,6 +73,7 @@ angular.module('truckApp').controller('MapCtrl',
 				var name = trucks[i].name;
 				var windowCopy = trucks[i].windowCopy;
 				var menuUrl = trucks[i].menuUrl;
+				var dateModified = trucks[i].dateModified;
 				var id = i;
 				markers.push({
 					id: id,
@@ -80,6 +82,7 @@ angular.module('truckApp').controller('MapCtrl',
 		                address: address,
 		                windowCopy: windowCopy,
 		                menuUrl: menuUrl,
+		                dateModified: dateModified,
 		                icon: '../images/FoodTruckIcon.png'
 					},
 					coords: {

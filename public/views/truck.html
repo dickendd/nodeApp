@@ -36,6 +36,7 @@
                         <p>Street Address: {{ truck.address }}</p>
                         <p>Longitude: {{ truck.geo.coordinates[0] }} , Latitude: {{ truck.geo.coordinates[1] }}</p>
                         <p>Website/Menu link: {{ truck.menuUrl }}</p>
+                        <p>Date Modified: {{ truck.dateModified | date:'MMM dd yyyy H:mm' }}</p>
                         <button class="btn btn-default btn-primary" ng-click="setEditing()" ng-if="!editingTruck">Edit</button>
                         <button class="btn btn-default btn-primary" ng-click="setEditing()" ng-if="editingTruck">Close</button>
                     </div>
@@ -59,7 +60,7 @@
                                 </div>
                                 <div class="col-lg-2">
                                     <span class="btn btn-default form-control" ng-click="updateLocation(truck)">
-                                        <span class="glyphicon glyphicon-record"></span> Use GPS
+                                        <span class="glyphicon glyphicon-map-marker"></span> Use GPS
                                     </span>
                                 </div>
                             </div>

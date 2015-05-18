@@ -92,6 +92,7 @@ module.exports = function(app, auth) {
 		truck.windowCopy = req.body.windowCopy;
 		truck.menuUrl = req.body.menuUrl;
 		truck.createdBy = req.body.createdBy;
+		truck.dateModified = req.body.dateModified;
 
 		truck.save(function(err){
 			if (err) {
@@ -137,6 +138,7 @@ module.exports = function(app, auth) {
 			truck.menuUrl = req.body.menuUrl;
 			truck.geo.coordinates = req.body.geo.coordinates;
 			truck.address = req.body.address;
+			truck.dateModified = req.body.dateModified;
 			truck.save(function(err){
 				if (err) {
 					res.send(err);
