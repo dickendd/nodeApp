@@ -112,6 +112,7 @@ module.exports = function(app, auth) {
 	});
 
 	app.get('/api/trucks/user/:createdBy', function(req, res){
+		console.log(req);
 		Truck.find({'createdBy': req.params.createdBy}, function(err, truck){
 			if (err) {
 				res.send(err);

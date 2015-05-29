@@ -31,6 +31,11 @@ var app = angular.module('truckApp', ['ui.router', 'uiGmapgoogle-maps', 'ngStora
 	            authorizedRoles: [USER_ROLES.user, USER_ROLES.admin]
 	          }
 	        })
+	        .state('truck', {
+	          url: '/:id',
+	          templateUrl: 'views/map.html',
+	          controller: 'MapCtrl'
+	        })
 	        .state('login', {
 	          url: '/login',
 	          templateUrl: 'views/login.html',
@@ -75,7 +80,7 @@ var app = angular.module('truckApp', ['ui.router', 'uiGmapgoogle-maps', 'ngStora
             } else {
                 var authorizedRoles = [USER_ROLES.all];
             }
-            if (!AuthService.isAuthorized(authorizedRoles) && next.name !== 'login' && next.name !== 'index' && next.name !== 'signup') {
+            if (!AuthService.isAuthorized(authorizedRoles) && next.name !== 'login' && next.name !== 'index' && next.name !== 'signup' && next.name !== 'truck') {
                 // event.preventDefault();
                 if (AuthService.isAuthenticated()) {
                 	console.log('not authorized');

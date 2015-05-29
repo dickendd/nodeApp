@@ -6,7 +6,8 @@ angular.module('truckApp').controller('MapCtrl',
 	'uiGmapIsReady', 
 	'$q',
 	'AuthService',
-	function($scope, TruckService, LocationService, uiGmapGoogleMapApi, uiGmapIsReady, $q, AuthService){
+	'$location',
+	function($scope, TruckService, LocationService, uiGmapGoogleMapApi, uiGmapIsReady, $q, AuthService, $location){
 
 		$scope.truckService = TruckService;
 		$scope.locationService = LocationService;
@@ -123,6 +124,21 @@ angular.module('truckApp').controller('MapCtrl',
 			return deferred.promise;
 		}
 
+		function getUserTruck(userId){
+			var deferred = $q.defer();
+
+			$scope.truckService.getByUser(userId)
+				.success(function(truck){
+					deferred.resolve(truck);
+				})
+				.error(function(err){
+					deferred.reject(err);
+					$scope.status = 'Unable to load trucks: ' + err.message;
+				});
+
+			return deferred.promise;
+		}
+
 		function centerMap() {
 		    if(!$scope.map) {
 	            return;
@@ -140,7 +156,7 @@ angular.module('truckApp').controller('MapCtrl',
 	            },
 	            
 	            function(error) {
-	                alert(error);
+	                console.log(error);
 	            }
 	        )
 		};
@@ -149,13 +165,24 @@ angular.module('truckApp').controller('MapCtrl',
 
 	    uiGmapIsReady.promise()
 	    .then(function (instances) {
-	        getTrucks()
-	        .then(function(trucks){
-	        	createMarkers(trucks)
-	        	.then(function(markers){
-	        		centerMap();
-	        		$scope.addMarkerClickFunction(markers);
-	        	});
-	        });
+			if($location.path() !== '/') {
+				getUserTruck($location.path().replace('/', ''))
+				.then(function(trucks){
+		        	createMarkers(trucks)
+		        	.then(function(markers){
+		        		centerMap();
+		        		$scope.addMarkerClickFunction(markers);
+		        	});
+		        });
+			} else {
+		        getTrucks()
+		        .then(function(trucks){
+		        	createMarkers(trucks)
+		        	.then(function(markers){
+		        		centerMap();
+		        		$scope.addMarkerClickFunction(markers);
+		        	});
+		        });
+		    }
 	    });
 }]);

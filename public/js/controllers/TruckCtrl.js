@@ -53,7 +53,7 @@ angular.module('truckApp').controller('TruckCtrl',
 		function getUserTruck(){
 			$scope.truckService.getByUser($window.sessionStorage.userId)
 				.success(function(truck){
-					$scope.userTrucks= truck;
+					$scope.userTrucks = truck;
 
 					$scope.userHasTrucks = $scope.userTrucks.length > 0;
 				})
