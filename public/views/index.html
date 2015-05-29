@@ -54,12 +54,13 @@
                 <div class="tacoIcon pull-left">
                     <img src="/images/icon-taco-white.png" width="40" height="40">
                 </div>
-                <a class="navbar-brand" href="/">Food Trucks</a>
+                <a class="navbar-brand" href="/">Wheel Fresh Food</a>
             </div>
 
             <!-- LINK TO OUR PAGES. ANGULAR HANDLES THE ROUTING HERE -->
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right" ng-controller="AdminUserCtrl">
+                    <li><a href="/">Map</a></li>
                     <li ng-if="loggedIn"><span class="username">{{ currentUser.email }}</span></li>
                     <li ng-if="loggedIn"><a ng-href="/trucks">My Truck</a></li>
                     <li ng-if="!loggedIn"><a ng-href="/login">Login</a></li>
