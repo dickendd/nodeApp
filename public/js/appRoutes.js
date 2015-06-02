@@ -20,7 +20,18 @@ angular.module('appRoutes', []).config(['$locationProvider', '$httpProvider', '$
         .state('login', {
           url: '/login',
           templateUrl: 'views/login.html',
-          controller: 'AdminUserCtrl'
+          controller: 'AdminUserCtrl',
+          data: {
+            authorizedRoles: 'all'
+          }
+        })
+        .state('fblogin', {
+          url: '/fblogin',
+          templateUrl: 'views/facebookLogin.html',
+          controller: 'FacebookAuthCtrl',
+          data: {
+            authorizedRoles: USER_ROLES.user
+          }
         })
         .state('signup', {
           url: '/signup',

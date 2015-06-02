@@ -1,4 +1,4 @@
-var app = angular.module('truckApp', ['ui.router', 'uiGmapgoogle-maps', 'ngStorage'])
+var app = angular.module('truckApp', ['ui.router', 'uiGmapgoogle-maps', 'ngStorage', 'facebook'])
 	.constant('AUTH_EVENTS', {
 		loginSuccess: 'auth-login-success',
 		loginFailed: 'auth-login-failed',
@@ -10,8 +10,10 @@ var app = angular.module('truckApp', ['ui.router', 'uiGmapgoogle-maps', 'ngStora
 		all: '*',
 		admin: 'ADMIN',
 		user: 'USER'
-	}).config(['$locationProvider', '$httpProvider', '$stateProvider', '$urlRouterProvider', 'USER_ROLES', function($locationProvider, $httpProvider, $stateProvider, $urlRouterProvider, USER_ROLES) {
+	}).config(['$locationProvider', '$httpProvider', '$stateProvider', '$urlRouterProvider', 'USER_ROLES', 'FacebookProvider', function($locationProvider, $httpProvider, $stateProvider, $urlRouterProvider, USER_ROLES, FacebookProvider) {
 
+		FacebookProvider.init('934678723251786');
+		
 	    $httpProvider.interceptors.push('authInterceptor');
 
 	    $stateProvider
