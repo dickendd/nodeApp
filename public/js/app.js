@@ -34,7 +34,7 @@ var app = angular.module('truckApp', ['ui.router', 'uiGmapgoogle-maps', 'ngStora
 	          }
 	        })
 	        .state('truck', {
-	          url: '/:id',
+	          url: '/truck/:id',
 	          templateUrl: 'views/map.html',
 	          controller: 'MapCtrl'
 	        })
@@ -44,6 +44,14 @@ var app = angular.module('truckApp', ['ui.router', 'uiGmapgoogle-maps', 'ngStora
 	          controller: 'AdminUserCtrl',
 	          data: {
 	            authorizedRoles: [USER_ROLES.all]
+	          }
+	        })
+	        .state('fblogin', {
+	          url: '/fblogin',
+	          templateUrl: 'views/facebookLogin.html',
+	          controller: 'FacebookAuthCtrl',
+	          data: {
+	            authorizedRoles: [USER_ROLES.user, USER_ROLES.admin]
 	          }
 	        })
 	        .state('signup', {

@@ -1,9 +1,8 @@
 <div class="row">
     <div class="col-lg-12">
-        <div class="panel panel-primary">
-            <div class="col-lg-12 button-primary form-control" ng-click="login()">
-                <h1>Log In With Facebook</h1>
-            </div>
+        <div class="panel panel-primary p20 bdr0">
+            <div class="col-lg-12 btn btn-default btn-primary" ng-click="login()" ng-hide="loggedIn">Log In With Facebook</div>
+            <h2 ng-show="loggedIn">Thanks for connecting your Facebook account, {{ userName }}!</h2>
         </div>
     </div>
 </div>
