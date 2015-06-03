@@ -46,14 +46,6 @@ var app = angular.module('truckApp', ['ui.router', 'uiGmapgoogle-maps', 'ngStora
 	            authorizedRoles: [USER_ROLES.all]
 	          }
 	        })
-	        .state('fblogin', {
-	          url: '/fblogin',
-	          templateUrl: 'views/facebookLogin.html',
-	          controller: 'FacebookAuthCtrl',
-	          data: {
-	            authorizedRoles: [USER_ROLES.user, USER_ROLES.admin]
-	          }
-	        })
 	        .state('signup', {
 	          url: '/signup',
 	          templateUrl: 'views/signup.html',

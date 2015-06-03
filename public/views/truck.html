@@ -1,5 +1,9 @@
 <div class="container">
     <div class="jumbotron row">
+        <div ng-controller="FacebookAuthCtrl">
+            <div class="col-lg-12 btn btn-default btn-primary" ng-click="login()" ng-hide="loggedIn">Log In With Facebook</div>
+            <h2 ng-show="loggedIn">Thanks for connecting your Facebook account, {{ userName }}!</h2>
+        </div>
         <div ng-if="!userHasTrucks">
             <div class="col-lg-12 mb20">
                 <form data-ng-submit="" class="form-inline">

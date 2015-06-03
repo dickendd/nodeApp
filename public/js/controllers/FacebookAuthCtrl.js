@@ -5,19 +5,18 @@ angular.module('truckApp').controller('FacebookAuthCtrl', function($scope, Faceb
       Facebook.login(function(response) {
         // Do something with response.
         if(response.status === 'connected'){
-          console.log(response);
-          $scope.me();
-          $scope.fbloggedin = true;
+          $scope.getLoginStatus();
         }
-      }, {scope: 'manage_pages'});
+      }, {scope: 'manage_pages,publish_actions'});
     };
 
     $scope.getLoginStatus = function() {
       Facebook.getLoginStatus(function(response) {
         if(response.status === 'connected') {
           console.log(response);
-          $scope.loggedIn = true;
           $scope.me();
+          $scope.loggedIn = true;
+          $scope.currentUser.fbToken = response.authResponse.accessToken;
         } else {
           $scope.loggedIn = false;
         }
@@ -27,11 +26,17 @@ angular.module('truckApp').controller('FacebookAuthCtrl', function($scope, Faceb
     $scope.me = function() {
       Facebook.api('/me', function(response) {
         console.log(response);
-        $scope.user = response;
-        $scope.userName = $scope.user.name;
-        $scope.fblink = $scope.user.link;
+        $scope.userName = response.name;
+        $scope.fblink = response.link;
       });
     };
 
-    $scope.getLoginStatus();
+    $scope.$watch(function() {
+      // This is for convenience, to notify if Facebook is loaded and ready to go.
+      return Facebook.isReady();
+    }, function(newVal) {
+      // You might want to use this to disable/show/hide buttons and else
+      $scope.getLoginStatus();
+    });
+
   });
