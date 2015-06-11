@@ -5,7 +5,8 @@ var UserSchema   = new Schema({
     email: String,
     password: String,
 	role: String,
-    token: String
+    token: String,
+    fbToken: String
 });
  
 module.exports = mongoose.model('User', UserSchema);

@@ -42,8 +42,11 @@ angular.module('truckApp')
             return getUserFromToken();
         };
         authService.save = function(data, success, error) {
-                $http.post(baseUrl + '/signup', data).success(success).error(error)
-            };
+            $http.post(baseUrl + '/signup', data).success(success).error(error)
+        };
+        authService.update = function(data, success, error) {
+            $http.put(baseUrl + '/update', data).success(success).error(error)
+        };
         authService.login = function(data, success, error) {
             return $http.post(baseUrl + '/login', data).success(function (res) {
                 Session.create(res.data.token, res.data._id, res.data.role);

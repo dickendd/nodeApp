@@ -53,15 +53,15 @@ var app = angular.module('truckApp', ['ui.router', 'uiGmapgoogle-maps', 'ngStora
 	          data: {
 	          	authorizedRoles: [USER_ROLES.admin]
 	          }
-	        })
-	        .state('me', {
+	        });
+	        /*.state('me', {
 	          url: '/me',
 	          templateUrl: 'views/profile.html',
 	          controller: 'ProfileCtrl',
 	          data: {
 	            authorizedRoles: [USER_ROLES.user, USER_ROLES.admin]
 	          }
-	        });
+	        });*/
 
 	    $urlRouterProvider.otherwise('/');
 

@@ -9,7 +9,7 @@ module.exports = function(app, auth) {
 	        if (err) {
 	            res.json({
 	                type: false,
-	                data: "Error occured: " + err
+	                data: 'Error occured: ' + err
 	            });
 	        } else {
 	            if (user) {
@@ -21,7 +21,7 @@ module.exports = function(app, auth) {
 	            } else {
 	                res.json({
 	                    type: false,
-	                    data: "Incorrect email/password"
+	                    data: 'Incorrect email/password'
 	                });    
 	            }
 	        }
@@ -33,13 +33,13 @@ module.exports = function(app, auth) {
 	        if (err) {
 	            res.json({
 	                type: false,
-	                data: "Error occured: " + err
+	                data: 'Error occurred: ' + err
 	            });
 	        } else {
 	            if (user) {
 	                res.json({
 	                    type: false,
-	                    data: "User already exists!"
+	                    data: 'User already exists!'
 	                });
 	            } else {
 	                var userModel = new User();
@@ -61,12 +61,52 @@ module.exports = function(app, auth) {
 	    });
 	});
 
+	app.put('/update', function(req, res) {
+		User.findOne({email: req.body.email}, function(err, user) {
+			if (err) {
+				res.json({
+					type: false,
+					data: 'Error occurred: ' + err
+				});
+			} else {
+				if (user) {
+					if (user.fbToken) {
+						console.log('user already has fbToken: ' + user.fbToken);
+						res.json({
+							type: true,
+							data: {
+								fbToken: user.fbToken
+							}
+						});
+					} else if (req.body.fbToken) {
+						user.fbToken = req.body.fbToken;
+					}
+					user.save(function(err, user) {
+						if (err) {
+							// console.log(err);
+							res.json({
+								type: false,
+								data: 'Error occurred: ' + err
+							})
+						} else {
+							// console.log(user);
+							res.json({
+								type: true,
+								data: user
+							})
+						}
+					});
+				}
+			}
+		});
+	});
+
 	app.get('/me', ensureAuthorized, function(req, res) {
 	    User.findOne({token: req.token}, function(err, user) {
 	        if (err) {
 	            res.json({
 	                type: false,
-	                data: "Error occured: " + err
+	                data: 'Error occurred: ' + err
 	            });
 	        } else {
 	            res.json({
@@ -169,9 +209,9 @@ module.exports = function(app, auth) {
 
 function ensureAuthorized(req, res, next) {
     var bearerToken;
-    var bearerHeader = req.headers["authorization"];
+    var bearerHeader = req.headers['authorization'];
     if (typeof bearerHeader !== 'undefined') {
-        var bearer = bearerHeader.split(" ");
+        var bearer = bearerHeader.split(' ');
         bearerToken = bearer[1];
         req.token = bearerToken;
         next();
