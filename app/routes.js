@@ -70,17 +70,14 @@ module.exports = function(app, auth) {
 				});
 			} else {
 				if (user) {
-					if (user.fbToken) {
-						console.log('user already has fbToken: ' + user.fbToken);
-						res.json({
-							type: true,
-							data: {
-								fbToken: user.fbToken
-							}
-						});
-					} else if (req.body.fbToken) {
+					if (req.body.fbToken !== user.fbToken) {
 						user.fbToken = req.body.fbToken;
 					}
+
+					if (req.body.fbPage !== user.fbPage) {
+						user.fbPage = req.body.fbPage;
+					}
+					
 					user.save(function(err, user) {
 						if (err) {
 							// console.log(err);
@@ -152,7 +149,7 @@ module.exports = function(app, auth) {
 	});
 
 	app.get('/api/trucks/user/:createdBy', function(req, res){
-		console.log(req);
+		// console.log(req);
 		Truck.find({'createdBy': req.params.createdBy}, function(err, truck){
 			if (err) {
 				res.send(err);

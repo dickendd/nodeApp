@@ -62,7 +62,14 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right" ng-controller="AdminUserCtrl">
                     <li><a href="/">Map</a></li>
-                    <li ng-if="loggedIn"><span class="username">{{ currentUser.email }}</span></li>
+                    <li ng-if="loggedIn && (fbLogInStatus !== 104)"><span class="username">{{ currentUser.email }}</span></li>
+                    <li ng-if="loggedIn && (fbLoginStatus === 104)" class="fbSection">
+                        <a href="#" ng-click="showFbDetails()" class="p0">
+                            <img src="{{ currentUser.fbImage }}"/>
+                            {{ userName }}
+                            <div class="glyphicon glyphicon-cog"></div>
+                        </a>
+                    </li>
                     <li ng-if="loggedIn"><a ng-href="/trucks">My Truck</a></li>
                     <li ng-if="!loggedIn"><a ng-href="/login">Login</a></li>
                     <li ng-if="loggedIn"><a ng-href="/" ng-click="logout()" class="pr20 csrPointer">Logout</a></li>

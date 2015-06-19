@@ -166,7 +166,7 @@ angular.module('truckApp').controller('MapCtrl',
 	    uiGmapIsReady.promise()
 	    .then(function (instances) {
 			if($location.path() !== '/') {
-				getUserTruck($location.path().replace('/', ''))
+				getUserTruck($location.path().replace('/truck/', ''))
 				.then(function(trucks){
 		        	createMarkers(trucks)
 		        	.then(function(markers){

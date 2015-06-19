@@ -1,10 +1,19 @@
 <div class="container">
-    <div class="jumbotron row">
-        <div>
-            <h2>{{ fbStatusText }}</h2>
-            <p ng-if="fbStatus == 104">{{ userName }}</p>
-            <button class="col-lg-6 btn btn-default btn-primary" ng-click="fbLogin()" ng-hide="fbStatus == 104 || fbStatus == 103">Log In With Facebook</button>
-            <button ng-show="fbStatus == 103" ng-click="fbLogOut()">Log out of Facebook</button>
+    <div class="jumbotron row rel">
+        <div ng-if="fbShowDetails" class="col-lg-4 col-md-5 fbDetails">
+            <span ng-click="showFbDetails()" class="glyphicon glyphicon-remove pull-right csrPointer"></span>
+            <label class="mb20">
+                <span class="mb10">Publish as:</span> 
+                <select ng-if="fbLogInStatus === 104" ng-model="$parent.$parent.selectedPage" ng-options="page.name for page in fbPages track by page.id" class=""></select>
+            </label>
+            <button ng-click="setPage($parent.selectedPage)" class="col-md-12 btn btn-default btn-primary mb10">Set Page</button>
+            <button ng-if="fbLogInStatus === 104" ng-click="fbRevoke()" class="col-md-12 btn btn-default btn-secondary">Remove Facebook Account</button>
+        </div>
+
+        <p nf-if="fbStatusText" class="pull-right">{{ fbStatusText }}</p>
+        <div class="col-lg-12 pull-right">
+            <button ng-show="fbLogInStatus == 103" ng-click="fbLogOut()" class="btn btn-default btn-secondary pull-right">Log out of Facebook</button>
+            <button ng-click="fbLogin()" ng-hide="fbLogInStatus == 104 || fbLogInStatus == 103" class="btn btn-default btn-primary pull-right" >Log In With Facebook</button>
         </div>
         <div ng-if="!userHasTrucks">
             <div class="col-lg-12 mb20">
@@ -34,18 +43,18 @@
         <div ng-if="userHasTrucks" class="col-lg-12 mb20">
             <h2 class="mb20">Change your info or update your location:</h2>
             <ul class="list-unstyled">
-        	    <li class="col-lg-12 mb20 truckContainer pb10" ng-repeat="truck in userTrucks" ng-mouseover="mouseOver = true" ng-mouseleave="mouseOver = false">
+        	    <li class="col-lg-8 mb20 truckContainer p10" ng-repeat="truck in userTrucks" ng-mouseover="mouseOver = true" ng-mouseleave="mouseOver = false">
+                    <button class="btn btn-default btn-primary" ng-click="setEditing()" ng-if="!editingTruck">Edit</button>
                     <span ng-click="deleteTruck(truck._id)" class="mt20 csrPointer right" ng-show="mouseOver">X Delete</span>
-                    <div class="col-lg-8 p5">
+                    <div class="p5">
                         <h3>{{ truck.name }}</h3>
                         <p>Description: {{ truck.windowCopy }}</p>
                         <p>Street Address: {{ truck.address }}</p>
                         <p>Longitude: {{ truck.geo.coordinates[0] }} , Latitude: {{ truck.geo.coordinates[1] }}</p>
                         <p>Website/Menu link: {{ truck.menuUrl }}</p>
                         <p>Date Modified: {{ truck.dateModified | date:'MMM dd yyyy H:mm' }}</p>
-                        <button class="btn btn-default btn-primary" ng-click="setEditing()" ng-if="!editingTruck">Edit</button>
-                        <button class="btn btn-default btn-primary" ng-click="setEditing()" ng-if="editingTruck">Close</button>
-                        <button class="btn btn-default btn-primary" ng-click="fbPost({text: truck.windowCopy, address: truck.address, link: truck.menuUrl})" ng-if="fbStatus == 104">Post to Facebook</button>
+                        <button class="btn btn-default btn-primary col-md-4" ng-click="fbPagePost(selectedPage, {text: truck.windowCopy, address: truck.address, link: truck.menuUrl})" ng-if="fbLogInStatus == 104">Post to Facebook</button>
+                        <p class="col-md-8">Posting to: {{ selectedPage.name }}</p>
                     </div>
                     <form ng-show="editingTruck" data-ng-submit="editTruck(truck._id, truck.name, truck.windowCopy, truck.menuUrl, position, truck.address, setEditing)" class="col-lg-12">
                         <div class="row form-group">
@@ -73,7 +82,8 @@
                             </div>
                         </div>
                         <div class="row form-group">
-                            <button type="submit" class="btn btn-default btn-primary form-control">Save</button>
+                            <button type="submit" class="btn btn-default btn-primary col-md-6">Save</button>
+                            <button class="btn btn-default btn-secondary col-md-6" ng-click="setEditing()" ng-if="editingTruck">Close</button>
                         </div>
                     </form>
         	    </li>

@@ -4,6 +4,8 @@ angular.module('truckApp').controller('ApplicationCtrl', function ($rootScope, $
 	$scope.isAuthorized = AuthService.isAuthorized;
 	$rootScope.errors = null;
 	$scope.loggedIn = false;
+	$scope.fbShowDetails = false;
+	$scope.fbLoginStatus = 100;
 
 	$scope.$on('logError', function (data) {
 		$scope.errors = data;
@@ -19,6 +21,18 @@ angular.module('truckApp').controller('ApplicationCtrl', function ($rootScope, $
 
 	$scope.setLoggedIn = function(loggedIn) {
 		$scope.loggedIn = loggedIn;
+	};
+
+	$scope.setFbStatus = function(fbStatus) {
+		$scope.fbLoginStatus = fbStatus;
+	};
+
+	$scope.showFbDetails = function() {
+		if ($scope.fbShowDetails) {
+			$scope.fbShowDetails = false;
+		} else {
+			$scope.fbShowDetails = true;
+		}
 	};
 
 	// Check if there is a currentUser to set loggedIn variable

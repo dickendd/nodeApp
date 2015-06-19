@@ -2,8 +2,8 @@ angular.module('truckApp')
     .constant('FB0', 'Login to Facebook and connect with your WFF account if you wish to post to your wall.')
     .constant('FB1', 'Please log back into Facebook.')
     .constant('FB2', 'Connect your Facebook account if you wish to post to your wall.')
-    .constant('FB3', 'Please log out and back in with correct account')
-    .constant('FB4', 'Thanks for connecting your Facebook account')
+    .constant('FB3', 'We don\'t recognize this account. Please log out and back in with correct Facebook account')
+    .constant('FB4', '')
     .controller('AdminUserCtrl', 
     	['$rootScope',
         '$scope',
@@ -26,6 +26,8 @@ angular.module('truckApp')
             };
 
             $rootScope.fbLogInStatus = 100;
+            $rootScope.fbIsReady = false;
+            $rootScope.fbShowDetails = false;
 
     		$scope.login = function() {
                 var formData = {
@@ -66,14 +68,14 @@ angular.module('truckApp')
 
                 if ($rootScope.currentUser != null && $rootScope.currentUser.email) {
                     Facebook.getLoginStatus(function(response) {
-                        // console.log(response);
-                        console.log($rootScope.currentUser);
                         if (response.status === 'connected') {
                             $scope.fbMe()
                             .then(function(fbUser) {
                                 if (fbUser.email === $rootScope.currentUser.email) {
                                     status = 104;
                                     deferred.resolve(status);
+                                    getUserImage(fbUser.id);
+                                    getUserPages(fbUser.id);
                                 } else if ($rootScope.currentUser.fbToken != null) {
                                     status = 103;
                                     deferred.resolve(status);
@@ -99,6 +101,24 @@ angular.module('truckApp')
                 return deferred.promise;
             };
 
+            function getUserImage(id) {
+                Facebook.api(
+                    '/' + id + '/picture',
+                    function (response) {
+                      if (response && !response.error) {
+                        /* handle the result */
+                        $rootScope.currentUser.fbImage = response.data.url;
+                      }
+                    }
+                );
+            }
+
+            function getUserPages(id) {
+                Facebook.api('/' + id + '/accounts', function(res){
+                    $rootScope.fbPages = res.data;
+                });
+            };
+
             function fbStatusText(status) {
                 console.log(status);
                 switch (status) {
@@ -121,7 +141,8 @@ angular.module('truckApp')
                         $rootScope.fbStatusText = null;
                         break;
                 }
-                $rootScope.fbStatus = status;
+                $rootScope.fbLogInStatus = status;
+                $scope.setFbStatus(status);
             }
 
 
@@ -140,7 +161,7 @@ angular.module('truckApp')
                         alert(res.data)
                     } else {
                         $window.sessionStorage.token = res.data.token;
-                        window.location = "/"   
+                        window.location = '/'   
                     }
                 }, function() {
                     $rootScope.error = 'Failed to sign up';
@@ -148,12 +169,16 @@ angular.module('truckApp')
             };
      
             $scope.me = function() {
+                var deferred = $q.defer();
                 AuthService.me(function(res) {
-                    $rootScope.currentUser = res.data;
-                    $scope.myDetails = res;
+                    $scope.setCurrentUser(res.data);
+                    deferred.resolve(res);
                 }, function() {
                     $rootScope.error = 'Failed to fetch details';
-                })
+                    deferred.reject('Failed to fetch details');
+                });
+
+                return deferred.promise;
             };
      
             $scope.logout = function() {
@@ -171,11 +196,18 @@ angular.module('truckApp')
                         alert(res.data);
                     } else {
                         // return res;
+                        console.log(res);
                     }
                 });
+
+                if (data.fbToken == '') {
+                    $rootScope.fbStatusText = '';
+                    $rootScope.userName = '';
+                    $rootScope.currentUser.fbImage = '';
+                    $rootScope.currentUser.fbToken = '';
+                    $rootScope.fbLogInStatus = 100;
+                }
             };
-
-
 
             $rootScope.fbLogin = function() {
                 // From now on you can use the Facebook service just as Facebook api says
@@ -194,25 +226,22 @@ angular.module('truckApp')
                             console.log(res);
                         });
                     }
-                }, {scope: 'manage_pages,publish_actions,email'});
+                }, {scope: 'manage_pages,email,publish_pages'});
             };
 
             $rootScope.fbLogOut = function() {
                 Facebook.logout(function(response) {
-                    $rootScope.fbLoggedInAndConnected = false;
                     $rootScope.fbUser = {};
                     $rootScope.fbLoggedIn = false;
-                    $rootScope.emailsDontMatch = false;
                     $rootScope.fbLoginMessage = null;
+                    $rootScope.fbLogInStatus = 100;
 
                     $scope.getLoginStatus()
                     .then(function(res){
                         fbStatusText(res);
                     });
                 });
-            }
-
-            
+            };
 
             $scope.fbMe = function() {
                 var deferred = $q.defer();
@@ -225,22 +254,70 @@ angular.module('truckApp')
                 return deferred.promise;
             };
 
-            $rootScope.fbPost = function(data) {
-                var messageText = data.text + ' at ' + data.address + '. ' + data.link;
-                Facebook.api('/me/feed', 'post', {message: messageText});
-            }
+            $rootScope.fbPagePost = function(page, data) {
+                console.log(page);
+                if (page.id) {
+                    for(var i = 0; i < $rootScope.fbPages.length; i++){
+                        if($rootScope.fbPages[i].id === page.id){
+                            var accessToken = $rootScope.fbPages[i].access_token;
+                        }
+                    }
+                    var messageText = data.text + ' at ' + data.address + '. ' + data.link;
+                    Facebook.api('/' + page.id + '/feed?access_token=' + accessToken, 'post', {message: messageText}, function(res){
+                        console.log(res);
+                    });
+                } else {
+                    alert('Whoa there! Please select a page to post as!');
+                }
+            };
 
             $scope.$watch(function() {
                 return Facebook.isReady();
-            }, function(newVal) {
-                if ($location.path === '/trucks') {
-                    $scope.me();
-                    $scope.getLoginStatus()
-                    .then(function(res){
-                        fbStatusText(res);
+            }, function() {
+                $rootScope.fbIsReady = true;
+                if ($location.path() === '/trucks') {
+                    $scope.me()
+                    .then(function(){
+                        $scope.getLoginStatus()
+                        .then(function(res){
+                            $rootScope.selectedPage = $rootScope.currentUser.fbPage;
+                            fbStatusText(res);
+                        });
                     });
                 }
             });
+
+            $rootScope.fbRevoke = function(){
+                if (confirm('Are you sure you want to remove your Facebook page?')) {
+                    Facebook.api('/me/permissions', 'delete', function(response) {
+                        if (response.success) {
+                            var data = {
+                                fbToken: '',
+                                email: $rootScope.currentUser.email
+                            };
+                            $rootScope.addFbToken(data);
+                            $scope.showFbDetails();
+                            $scope.setFbStatus(100);
+                        }
+                    });
+                }
+            };
+
+            $rootScope.setPage = function(page) {
+                console.log(page.id);
+                data = {
+                    email: $rootScope.currentUser.email,
+                    fbPage: page,
+                    fbToken: $rootScope.currentUser.fbToken
+                };
+                AuthService.update(data, function(res) {
+                    if (res.type == false) {
+                        console.log(res);
+                    } else {
+                        console.log(res);
+                    }
+                });
+            };
 
             $scope.token = $window.sessionStorage.token;
     	}

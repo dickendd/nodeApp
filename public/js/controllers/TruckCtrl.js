@@ -224,4 +224,22 @@ angular.module('truckApp').controller('TruckCtrl',
 			});
 		};
 
+		$scope.$watch('selectedPage', function() {
+			console.log('hallelujia');
+		});
+
+		/*$rootScope.fbRevoke = function(){
+            console.log('truckCtrl');
+            if (confirm('Are you sure you want to remove your Facebook page?')) {
+                Facebook.api('/me/permissions', 'delete', function(response) {
+                    if (response.success) {
+                        var data = {
+                            fbToken: '',
+                            email: $rootScope.currentUser.email
+                        };
+                        $rootScope.addFbToken(data);
+                    }
+                });
+            }
+        };*/
 	}]);
