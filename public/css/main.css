@@ -101,6 +101,9 @@ html, body {
 	float: right;
 	padding: 15px 0 0 0;
 }
+.errorText {
+	color: #F00;
+}
 @media (max-width: 768px) {
 	.footer {
 		display: none;

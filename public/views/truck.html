@@ -54,7 +54,9 @@
                         <p>Website/Menu link: {{ truck.menuUrl }}</p>
                         <p>Date Modified: {{ truck.dateModified | date:'MMM dd yyyy H:mm' }}</p>
                         <button class="btn btn-default btn-primary col-md-4" ng-click="fbPagePost(selectedPage, {text: truck.windowCopy, address: truck.address, link: truck.menuUrl})" ng-if="fbLogInStatus == 104">Post to Facebook</button>
-                        <p class="col-md-8">Posting to: {{ selectedPage.name }}</p>
+                        <p class="col-md-8" ng-if="fbLogInStatus == 104">Posting to: {{ selectedPage.name }}</p>
+                        <p ng-if="postStatus.status == 'error'" class="errorText">{{ postStatus.message }}</p>
+                        <p ng-if="postStatus.status !== 'error'">{{ postStatus.message }}</p>
                     </div>
                     <form ng-show="editingTruck" data-ng-submit="editTruck(truck._id, truck.name, truck.windowCopy, truck.menuUrl, position, truck.address, setEditing)" class="col-lg-12">
                         <div class="row form-group">

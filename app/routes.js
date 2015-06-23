@@ -74,7 +74,7 @@ module.exports = function(app, auth) {
 						user.fbToken = req.body.fbToken;
 					}
 
-					if (req.body.fbPage !== user.fbPage) {
+					if (req.body.fbPage && req.body.fbPage !== user.fbPage) {
 						user.fbPage = req.body.fbPage;
 					}
 					

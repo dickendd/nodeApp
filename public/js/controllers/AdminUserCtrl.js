@@ -28,6 +28,10 @@ angular.module('truckApp')
             $rootScope.fbLogInStatus = 100;
             $rootScope.fbIsReady = false;
             $rootScope.fbShowDetails = false;
+            $rootScope.postStatus = {
+                status : null,
+                message : ''
+            };
 
     		$scope.login = function() {
                 var formData = {
@@ -39,11 +43,11 @@ angular.module('truckApp')
                     if (res.data.type == false) {
                         $scope.throwErrors(res.data.data);
                     } else {
+                        $location.path('/trucks');
                         $scope.throwErrors(null);
                         $scope.setCurrentUser(res.data.data);
                         $window.sessionStorage.token = res.data.token;
                         $scope.setLoggedIn(true);
-                        $location.path('/trucks');
 
                         if (res.data.data.fbToken) {
                             // User has connected facebook already, 
@@ -85,6 +89,7 @@ angular.module('truckApp')
                                 }
                             });
                             $rootScope.currentUser.fbToken = response.authResponse.accessToken;
+                            $rootScope.selectedPage = $rootScope.currentUser.fbPage;
                             $rootScope.currentFbUser = response.authResponse;
                         } else if ($rootScope.currentUser.fbToken != null) {
                             status = 101;
@@ -120,7 +125,6 @@ angular.module('truckApp')
             };
 
             function fbStatusText(status) {
-                console.log(status);
                 switch (status) {
                     case 100:
                         $rootScope.fbStatusText = FB0;
@@ -195,8 +199,7 @@ angular.module('truckApp')
                     if (res.type == false) {
                         alert(res.data);
                     } else {
-                        // return res;
-                        console.log(res);
+                        return res;
                     }
                 });
 
@@ -222,9 +225,7 @@ angular.module('truckApp')
                             fbToken: response.authResponse.accessToken,
                             email: $rootScope.currentUser.email
                         };
-                        $rootScope.addFbToken(data, function(res) {
-                            console.log(res);
-                        });
+                        $rootScope.addFbToken(data);
                     }
                 }, {scope: 'manage_pages,email,publish_pages'});
             };
@@ -255,7 +256,10 @@ angular.module('truckApp')
             };
 
             $rootScope.fbPagePost = function(page, data) {
-                console.log(page);
+                $rootScope.postStatus = {
+                    status : null,
+                    message : ''
+                };
                 if (page.id) {
                     for(var i = 0; i < $rootScope.fbPages.length; i++){
                         if($rootScope.fbPages[i].id === page.id){
@@ -265,6 +269,19 @@ angular.module('truckApp')
                     var messageText = data.text + ' at ' + data.address + '. ' + data.link;
                     Facebook.api('/' + page.id + '/feed?access_token=' + accessToken, 'post', {message: messageText}, function(res){
                         console.log(res);
+                        if(res.id){
+                            // alert('Post successful!');
+                            $rootScope.postStatus = {
+                                status : null,
+                                message : 'Post successful!'
+                            }
+                        } else if(res.error) {
+                            // alert(res.error.error_user_msg);
+                            $rootScope.postStatus = {
+                                status : 'error',
+                                message : res.error.error_user_msg
+                            }
+                        }
                     });
                 } else {
                     alert('Whoa there! Please select a page to post as!');
@@ -293,7 +310,8 @@ angular.module('truckApp')
                         if (response.success) {
                             var data = {
                                 fbToken: '',
-                                email: $rootScope.currentUser.email
+                                email: $rootScope.currentUser.email,
+                                fbPage: ''
                             };
                             $rootScope.addFbToken(data);
                             $scope.showFbDetails();
@@ -304,7 +322,7 @@ angular.module('truckApp')
             };
 
             $rootScope.setPage = function(page) {
-                console.log(page.id);
+                // console.log(page.id);
                 data = {
                     email: $rootScope.currentUser.email,
                     fbPage: page,
@@ -312,9 +330,9 @@ angular.module('truckApp')
                 };
                 AuthService.update(data, function(res) {
                     if (res.type == false) {
-                        console.log(res);
+                        // console.log(res);
                     } else {
-                        console.log(res);
+                        // console.log(res);
                     }
                 });
             };

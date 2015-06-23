@@ -32,7 +32,7 @@ angular.module('truckApp')
             }
             return user;
         }
- 
+
         var currentUser = getUserFromToken();
 
         $window.sessionStorage.userId = currentUser._id;
@@ -45,7 +45,6 @@ angular.module('truckApp')
             $http.post(baseUrl + '/signup', data).success(success).error(error)
         };
         authService.update = function(data, success, error) {
-            console.log(data);
             $http.put(baseUrl + '/update', data).success(success).error(error)
         };
         authService.login = function(data, success, error) {
