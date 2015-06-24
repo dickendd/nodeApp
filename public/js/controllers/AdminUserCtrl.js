@@ -56,8 +56,6 @@ angular.module('truckApp')
                             .then(function(res) {
                                 fbStatusText(res);
                             });
-                        } else {
-                            console.log('user has no facebook token');
                         }
                     }
                 }, function() {
@@ -268,15 +266,12 @@ angular.module('truckApp')
                     }
                     var messageText = data.text + ' at ' + data.address + '. ' + data.link;
                     Facebook.api('/' + page.id + '/feed?access_token=' + accessToken, 'post', {message: messageText}, function(res){
-                        console.log(res);
                         if(res.id){
-                            // alert('Post successful!');
                             $rootScope.postStatus = {
                                 status : null,
                                 message : 'Post successful!'
                             }
                         } else if(res.error) {
-                            // alert(res.error.error_user_msg);
                             $rootScope.postStatus = {
                                 status : 'error',
                                 message : res.error.error_user_msg
@@ -322,7 +317,6 @@ angular.module('truckApp')
             };
 
             $rootScope.setPage = function(page) {
-                // console.log(page.id);
                 data = {
                     email: $rootScope.currentUser.email,
                     fbPage: page,
@@ -330,9 +324,6 @@ angular.module('truckApp')
                 };
                 AuthService.update(data, function(res) {
                     if (res.type == false) {
-                        // console.log(res);
-                    } else {
-                        // console.log(res);
                     }
                 });
             };
