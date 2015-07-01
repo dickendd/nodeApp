@@ -28,6 +28,9 @@ angular.module('truckApp')
             $rootScope.fbLogInStatus = 100;
             $rootScope.fbIsReady = false;
             $rootScope.fbShowDetails = false;
+            $rootScope.editFbPost = false;
+            $rootScope.fbFinalText = '';
+            $rootScope.loadingAnimation = false;
             $rootScope.postStatus = {
                 status : null,
                 message : ''
@@ -253,19 +256,23 @@ angular.module('truckApp')
                 return deferred.promise;
             };
 
-            $rootScope.fbPagePost = function(page, data) {
+            $rootScope.fbPagePost = function(page, message) {
+                console.log('posting');
                 $rootScope.postStatus = {
                     status : null,
                     message : ''
                 };
-                if (page.id) {
+                if (page && page.id) {
                     for(var i = 0; i < $rootScope.fbPages.length; i++){
                         if($rootScope.fbPages[i].id === page.id){
                             var accessToken = $rootScope.fbPages[i].access_token;
                         }
                     }
-                    var messageText = data.text + ' at ' + data.address + '. ' + data.link;
-                    Facebook.api('/' + page.id + '/feed?access_token=' + accessToken, 'post', {message: messageText}, function(res){
+
+                    $rootScope.loadingAnimation = true;
+
+                    Facebook.api('/' + page.id + '/feed?access_token=' + accessToken, 'post', {message: message}, function(res){
+                        $rootScope.loadingAnimation = false;
                         if(res.id){
                             $rootScope.postStatus = {
                                 status : null,
@@ -282,6 +289,20 @@ angular.module('truckApp')
                     alert('Whoa there! Please select a page to post as!');
                 }
             };
+
+            $rootScope.setupFbPost = function(data) {
+                $rootScope.editFbPost = true;
+                $rootScope.fbFinalText = data.text + ' at ' + data.address + '. ' + data.link;
+            }
+
+            $rootScope.cancelFbPost = function() {
+                $rootScope.loadingAnimation = false;
+                $rootScope.postStatus = {
+                    status: null,
+                    message: ''
+                };
+                $rootScope.editFbPost = false;
+            }
 
             $scope.$watch(function() {
                 return Facebook.isReady();
