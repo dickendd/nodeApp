@@ -41,9 +41,9 @@
     <script src='//maps.googleapis.com/maps/api/js?sensor=false'></script>
     <meta name="google-site-verification" content="3zKR_fa_jYgLwSo4rZnLJfkr6qIUvku7uUo-QcdzL3Q" />
 </head>
-<body data-ng-app="truckApp" ng-controller="ApplicationCtrl">
+<body data-ng-app="truckApp" ng-controller="ApplicationCtrl" ng-class="{rel: noNav}">
     <!-- HEADER -->
-    <nav class="navbar navbar-inverse mb0 bdrRad0">
+    <nav class="navbar navbar-inverse mb0 bdrRad0" ng-hide="noNav">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -78,9 +78,19 @@
             </div>
         </div>
     </nav>
-    <div ng-if="errors" class="errorMessage">Error: {{ errors }}<a ng-click="throwErrors(null)" class="glyphicon glyphicon-remove csrPointer right txtWhite"></a></div>
+    <div ng-if="errors" class="errorMessage" ng-hide="noNav">Error: {{ errors }}<a ng-click="throwErrors(null)" class="glyphicon glyphicon-remove csrPointer right txtWhite"></a></div>
     <!-- ANGULAR DYNAMIC CONTENT -->
-    <div ui-view class="wFull hFull"></div>
+    <div class="wrapper" class="rel">
+        <div ui-view class="wFull hFull">
+        </div>
+
+        <a href="http://www.wheelfreshfood.com" target="_blank" ng-show="noNav">
+            <div class="tacoIcon overMap pull-right bgBlack p10">
+                <img src="/images/icon-taco-white.png" width="40" height="40" title="WheelFreshFood.com">
+            </div>
+        </a>
+    </div>
+
     <div class="footer navbar-fixed-bottom p10 bgBlack">
         <div class="container txtC">
             <p>Contact <a href="mailto:admin@wheelfreshfood.com">Admin</a> to sign up your food truck!</p>

@@ -161,16 +161,29 @@ angular.module('truckApp').controller('MapCtrl',
 	        )
 		};
 
+		function centerMapOnTruck(truck) {
+			if (!$scope.map) {
+				return;
+			}
+			$scope.map.center = {
+				longitude: truck[0].geo.coordinates[0],
+				latitude: truck[0].geo.coordinates[1]
+			}
+
+			$scope.map.zoom = 13;
+		}
+
 		$scope.centerMap = centerMap;
 
 	    uiGmapIsReady.promise()
 	    .then(function (instances) {
+	    	console.log('map ready');
 			if($location.path() !== '/') {
 				getUserTruck($location.path().replace('/truck/', ''))
 				.then(function(trucks){
 		        	createMarkers(trucks)
 		        	.then(function(markers){
-		        		centerMap();
+		        		centerMapOnTruck(trucks);
 		        		$scope.addMarkerClickFunction(markers);
 		        	});
 		        });

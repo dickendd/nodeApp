@@ -1,11 +1,12 @@
 // public/js/controllers/TruckCtrl.js
 angular.module('truckApp').controller('TruckCtrl', 
 	['$scope', 
+	'$rootScope',
 	'TruckService', 
 	'LocationService',
 	'Geocoder',
 	'$window', 
-	function($scope, TruckService, LocationService, Geocoder, $window) {
+	function($scope, $rootScope, TruckService, LocationService, Geocoder, $window) {
 
 		$scope.truckService = TruckService;
 		$scope.locationService = LocationService;
@@ -224,9 +225,7 @@ angular.module('truckApp').controller('TruckCtrl',
 			});
 		};
 
-		$scope.$watch('selectedPage', function() {
-			console.log('hallelujia');
-		});
+		$scope.embedSnippet = '<iframe src="http://www.wheelfreshfood.com/truck/' + $rootScope.currentUser._id + '" width="350" height="400" style="border: none;"></iframe>';
 
 		/*$rootScope.fbRevoke = function(){
             console.log('truckCtrl');

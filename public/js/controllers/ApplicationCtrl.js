@@ -1,4 +1,11 @@
-angular.module('truckApp').controller('ApplicationCtrl', function ($rootScope, $scope, USER_ROLES, AuthService) {
+angular.module('truckApp').controller('ApplicationCtrl', function ($rootScope, $scope, USER_ROLES, AuthService, $location) {
+
+	$rootScope.noNav = false;
+
+	if($location.path() !== '/' && $location.path() !== '/trucks') {
+		$rootScope.noNav = true;
+	}
+
 	$rootScope.currentUser = AuthService.getCurrentUser() || null;
 	$scope.userRoles = USER_ROLES;
 	$scope.isAuthorized = AuthService.isAuthorized;
