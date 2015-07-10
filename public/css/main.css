@@ -105,9 +105,9 @@ html, body {
     color: #000;
 }
 .codeSnippet textarea {
-    background-color: #989898;
-    color: #FFF;
-    padding: 10px;
+    background-color: #FFFFFF;
+    color: #333333;
+    padding: 20px;
     border: none;
 }
 .menuLink {
