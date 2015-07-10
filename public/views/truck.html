@@ -21,7 +21,7 @@
                     <h2>Add your food truck:</h2>
                 </form>
             </div>
-            <form data-ng-submit="formSubmit(navigator.geolocation)">
+            <form name="createTruck" data-ng-submit="formSubmit(navigator.geolocation)">
                 <div class="col-lg-12 mb20">
                     <input type="text" name="name" class="form-control" ng-model="newTruck.name" placeholder="Name">
                 </div>
@@ -29,7 +29,7 @@
                     <input type="text" name="windowCopy" class="form-control" ng-model="newTruck.windowCopy" placeholder="Copy">
                 </div>
                 <div class="col-lg-12 mb20">
-                    <input type="text" name="url" class="form-control" ng-model="newTruck.menuUrl" placeholder="URL">
+                    <input type="url" name="url" class="form-control" ng-model="newTruck.menuUrl" placeholder="URL">
                 </div>
                 <div class="col-lg-12 mb20">
                     <h2>Use an address, or leave blank to use your current location:</h2>
@@ -79,7 +79,7 @@
                         </div>
                         <div class="row form-group">
                             <label for="truckUrl">Website/Menu link:</label> 
-                            <input type="text" name="url" id="truckUrl" class="form-control" ng-model="truck.menuUrl" placeholder="Enter url here">
+                            <input type="url" name="url" id="truckUrl" class="form-control" ng-model="truck.menuUrl" placeholder="Enter url here">
                         </div>
                         <div class="row form-group">
                             <label for="truckUrl">Location:</label>

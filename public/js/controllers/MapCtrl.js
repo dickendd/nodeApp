@@ -165,9 +165,13 @@ angular.module('truckApp').controller('MapCtrl',
 			if (!$scope.map) {
 				return;
 			}
-			$scope.map.center = {
-				longitude: truck[0].geo.coordinates[0],
-				latitude: truck[0].geo.coordinates[1]
+			if (truck) {
+				$scope.map.center = {
+					longitude: truck[0].geo.coordinates[0],
+					latitude: truck[0].geo.coordinates[1]
+				}
+			} else {
+				$scope.center();
 			}
 
 			$scope.map.zoom = 13;
