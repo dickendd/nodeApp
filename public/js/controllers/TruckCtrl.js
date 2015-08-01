@@ -74,7 +74,9 @@ angular.module('truckApp').controller('TruckCtrl',
 			});
 		}
 
-		$scope.updateLocation();
+		if (!$scope.position) {
+			$scope.updateLocation();
+		}
 
 		function formSubmit(){
 
