@@ -2,7 +2,7 @@ angular.module('truckApp').controller('ApplicationCtrl', function ($rootScope, $
 
 	$rootScope.noNav = false;
 
-	if($location.path() !== '/' && $location.path() !== '/trucks') {
+	if($location.path() !== '/' && $location.path() !== '/trucks' && $location.path() !== '/login') {
 		$rootScope.noNav = true;
 	}
 

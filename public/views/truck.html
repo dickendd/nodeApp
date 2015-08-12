@@ -58,12 +58,11 @@
                                 <span class="dateModified">Last updated: {{ truck.dateModified | date:'MMM dd, yyyy H:mm' }}</span>
                             </div>
                         </div>
-                        <button class="btn btn-default btn-primary col-md-4" ng-click="setupFbPost({text: truck.windowCopy, address: truck.address, link: truck.menuUrl})" ng-if="fbLogInStatus == 104">Post to Facebook</button>
                     </div>
-                    <div ng-show="editFbPost" id="fbEdit" class="col-lg-12 p10">
+                    <div ng-show="editFbPost" id="fbEdit" class="col-lg-12 p10 mb20">
                         <div>
                             <p ng-if="fbLogInStatus == 104">Posting to: {{ selectedPage.name }}</p>
-                            <textarea ng-model="fbFinalText" class="wFull mb20"></textarea>
+                            <textarea ng-model="fbFinalText"  class="form-control mb20"></textarea>
                         </div>
                         <div>
                             <button ng-click="fbPagePost(selectedPage, fbFinalText)" class="btn btn-default btn-primary col-md-4 mr20">Post</button>
@@ -103,11 +102,12 @@
                             </div>
                         </div>
                         <div class="row form-group">
-                            <button type="submit" class="btn btn-default btn-primary col-md-6">Save</button>
-                            <button class="btn btn-default btn-secondary col-md-6" ng-click="setEditing()" ng-if="editingTruck">Close</button>
+                            <button type="submit" class="btn btn-default btn-primary">Save</button>
+                            <button class="btn btn-default btn-secondary" ng-click="setEditing()" ng-if="editingTruck">Close</button>
                         </div>
                     </form>
                     <button class="btn btn-default btn-primary" ng-click="setEditing()" ng-if="!editingTruck">Edit</button>
+                    <button class="btn btn-default btn-primary" ng-click="setupFbPost({text: truck.windowCopy, address: truck.address, link: truck.menuUrl})" ng-if="fbLogInStatus == 104 && !editingTruck">Post to Facebook</button>
                     <button class="btn btn-default btn-secondary" ng-click="deleteTruck(truck._id)" ng-if="!editingTruck"><span class="glyphicon glyphicon-remove"></span> Delete</span>
         	    </li>
         	</ul>
