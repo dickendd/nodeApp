@@ -21,31 +21,14 @@
                     <h2>Add your food truck:</h2>
                 </form>
             </div>
-            <form name="createTruck" data-ng-submit="formSubmit(navigator.geolocation)">
-                <div class="col-lg-12 mb20">
-                    <input type="text" name="name" class="form-control" ng-model="newTruck.name" placeholder="Name">
-                </div>
-                <div class="col-lg-12 mb20">
-                    <input type="text" name="windowCopy" class="form-control" ng-model="newTruck.windowCopy" placeholder="Copy">
-                </div>
-                <div class="col-lg-12 mb20">
-                    <input type="url" name="url" class="form-control" ng-model="newTruck.menuUrl" placeholder="URL">
-                </div>
-                <div class="col-lg-12 mb20">
-                    <h2>Use an address, or leave blank to use your current location:</h2>
-                    <input type="text" name="address" class="form-control" ng-model="newTruck.address" placeholder="e.g. 500 Granby Street, Norfolk, VA OR Plume Street at Bank Street, Norfolk, VA">
-                </div>
-                <span class="col-lg-12">
-                    <button type="submit" class="btn btn-primary">Add</button>
-                </span>
-            </form>
+            <div truck-form></div>
         </div>
         <div ng-if="userHasTrucks" class="col-lg-12 mb20">
             <h2 class="mb20">Change your info or update your location:</h2>
             <ul class="list-unstyled">
         	    <li class="col-lg-8 mb20 p10 truckContainer" ng-repeat="truck in userTrucks">
                     <div class="col-lg-12 p5 mb30">
-                        <div class="infoWindowWrapper infoWindow">
+                        <div class="infoWindowWrapper">
                             <div style="width: 0px; height: 0px; border-right: 10px solid transparent; border-left: 10px solid transparent; border-top: 24px solid rgba(0, 0, 0, 0.1); position: absolute; left: 140px; top: 225px;"></div>
                             <div style="border-top-width: 24px; position: absolute; left: 140px; top: 225px;"><div style="position: absolute; overflow: hidden; left: -6px; top: -1px; width: 16px; height: 30px;"><div style="position: absolute; left: 6px; background-color: rgb(255, 255, 255); transform: skewX(22.6deg); transform-origin: 0px 0px 0px; height: 24px; width: 10px; box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.6);"></div></div><div style="position: absolute; overflow: hidden; top: -1px; left: 10px; width: 16px; height: 30px;"><div style="position: absolute; left: 0px; background-color: rgb(255, 255, 255); transform: skewX(-22.6deg); transform-origin: 10px 0px 0px; height: 24px; width: 10px; box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.6);"></div></div></div>
                             <div class="fakeInfoWindow">

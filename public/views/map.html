@@ -1,5 +1,6 @@
-<div id="ftMap" class="hFull wFull" ng-if="render">
+<div id="ftMap" class="hFull wFull" ng-if="render" ng-controller="MapCtrl">
     <ui-gmap-google-map center="map.center" zoom="map.zoom" events="map.events" class="hFull wFull">
+        <ui-gmap-layer namespace="visualization" show="map.showHeat" type="HeatmapLayer" onCreated="heatLayerCallback"></ui-gmap-layer>
     	<ui-gmap-window coords="mapOptions.markers.selected.coords" show="windowOptions.visible" options="windowOptions"
 	        closeClick="closeClick()" templateUrl="templateUrl" templateParameter="{title: title, windowCopy: windowCopy, menuUrl: menuUrl, address: address, dateModified: dateModified}"
 	        >Title: {{ title }}

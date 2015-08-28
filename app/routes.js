@@ -1,4 +1,5 @@
 var Truck = require('./models/truck');
+var Location = require('./models/location');
 var User = require('./models/user');
 var jwt = require('jsonwebtoken');
 
@@ -119,7 +120,6 @@ module.exports = function(app, auth) {
 		res.json({ message: 'API working just fine' });
 	});
 
-	// add more routes here
 	app.post('/api/trucks', ensureAuthorized, function(req, res){
 
 		var truck = new Truck();
@@ -145,6 +145,29 @@ module.exports = function(app, auth) {
 				res.send(err);
 			}
 			res.json(trucks);
+		});
+	});
+
+	app.post('/api/locs', function(req, res){
+console.log(req.body);
+		var location = new Location();
+		location.geo = req.body.geo;
+		location.dateModified = req.body.dateModified;
+
+		location.save(function(err){
+			if (err) {
+				res.send(err);
+			}
+			res.json({ message: location });
+		});
+	});
+
+	app.get('/api/locs', function(req, res){
+		Location.find(function(err, locs){
+			if (err) {
+				res.send(err);
+			}
+			res.json(locs);
 		});
 	});
 

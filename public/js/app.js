@@ -10,9 +10,13 @@ var app = angular.module('truckApp', ['ui.router', 'uiGmapgoogle-maps', 'ngStora
 		all: '*',
 		admin: 'ADMIN',
 		user: 'USER'
-	}).config(['$locationProvider', '$httpProvider', '$stateProvider', '$urlRouterProvider', 'USER_ROLES', 'FacebookProvider', function($locationProvider, $httpProvider, $stateProvider, $urlRouterProvider, USER_ROLES, FacebookProvider) {
+	}).config(['$locationProvider', '$httpProvider', '$stateProvider', '$urlRouterProvider', 'USER_ROLES', 'FacebookProvider', 'uiGmapGoogleMapApiProvider', function($locationProvider, $httpProvider, $stateProvider, $urlRouterProvider, USER_ROLES, FacebookProvider, GoogleMapApi) {
 
 		FacebookProvider.init('934678723251786');
+
+        GoogleMapApi.configure({
+            libraries: 'visualization'
+        });
 		
 	    $httpProvider.interceptors.push('authInterceptor');
 
@@ -54,14 +58,6 @@ var app = angular.module('truckApp', ['ui.router', 'uiGmapgoogle-maps', 'ngStora
 	          	authorizedRoles: [USER_ROLES.admin]
 	          }
 	        });
-	        /*.state('me', {
-	          url: '/me',
-	          templateUrl: 'views/profile.html',
-	          controller: 'ProfileCtrl',
-	          data: {
-	            authorizedRoles: [USER_ROLES.user, USER_ROLES.admin]
-	          }
-	        });*/
 
 	    $urlRouterProvider.otherwise('/');
 

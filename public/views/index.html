@@ -20,6 +20,7 @@
     <script src="js/app.js"></script>
     <script src="js/services/TruckService.js"></script>
     <script src="js/services/LocationService.js"></script>
+    <script src="js/services/UserLocationService.js"></script>
     <script src="js/services/GeocoderService.js"></script>
     <script src="js/services/AuthService.js"></script>
     <script src="js/services/SessionService.js"></script>
@@ -31,6 +32,7 @@
     <script src="js/controllers/ProfileCtrl.js"></script>
     <script src="js/services/authInterceptor.js"></script>
     <script src="js/routingConfig.js"></script>
+    <script src="js/directives/truckForm.js"></script>
     <script src="/libs/angular-ui-router/release/angular-ui-router.min.js"></script>
     <script src="/libs/ngstorage/ngStorage.js"></script>
     <script src='/libs/lodash/dist/lodash.min.js'></script>
@@ -39,7 +41,8 @@
     <script src="js/filters/url.js"></script>
     <script src="/libs/angular-facebook/lib/angular-facebook.js"></script>
 
-    <script src='//maps.googleapis.com/maps/api/js?sensor=false'></script>
+    <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?libraries=visualization"></script>
+
     <meta name="google-site-verification" content="3zKR_fa_jYgLwSo4rZnLJfkr6qIUvku7uUo-QcdzL3Q" />
 </head>
 <body data-ng-app="truckApp" ng-controller="ApplicationCtrl" ng-class="{rel: noNav}">
@@ -63,6 +66,7 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right" ng-controller="AdminUserCtrl">
                     <li><a href="/">Map</a></li>
+                    <li ng-controller="MapCtrl" ng-if="loggedIn"><a ng-click="toggleHeatMap()" class="csrPointer">HeatMap</a></li>
                     <li ng-if="loggedIn && (fbLogInStatus !== 104)"><span class="username">{{ currentUser.email }}</span></li>
                     <li ng-if="loggedIn && (fbLoginStatus === 104)" class="fbSection">
                         <a href="#" ng-click="showFbDetails()" class="p0">
@@ -79,13 +83,13 @@
             </div>
         </div>
     </nav>
-    <div ng-if="errors" class="errorMessage" ng-hide="noNav">Error: {{ errors }}<a ng-click="throwErrors(null)" class="glyphicon glyphicon-remove csrPointer right txtWhite"></a></div>
+    <div ng-cloak ng-if="errors" class="errorMessage" ng-hide="noNav">Error: {{ errors }}<a ng-click="throwErrors(null)" class="glyphicon glyphicon-remove csrPointer right txtWhite"></a></div>
     <!-- ANGULAR DYNAMIC CONTENT -->
     <div class="wrapper" class="rel">
         <div ui-view class="wFull hFull">
         </div>
 
-        <a href="http://www.wheelfreshfood.com" target="_blank" ng-show="noNav">
+        <a href="http://www.wheelfreshfood.com" target="_blank" ng-cloak ng-if="noNav">
             <div class="tacoIcon overMap pull-right bgBlack p10">
                 <img src="/images/icon-taco-white.png" width="40" height="40" title="WheelFreshFood.com">
             </div>

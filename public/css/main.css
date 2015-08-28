@@ -101,9 +101,15 @@ html, body {
 }
 
 .fakeInfoWindow {
-  
   width: 250px;
   height: 150px;
+}
+.fakeInfoWindow p {
+  font-size: 13px;
+}
+.infoWindow {
+  width: 250px;
+  height: 175px;
 }
 .infoWindow p {
   font-size: 13px;
@@ -177,6 +183,13 @@ html, body {
 .spinner .bounce2 {
   -webkit-animation-delay: -0.16s;
   animation-delay: -0.16s;
+}
+
+.heatMapToggle {
+  z-index: 1000;
+  position: absolute;
+  top: 20px;
+  right: 20px;
 }
 
 @-webkit-keyframes bouncedelay {
